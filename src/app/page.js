@@ -1,103 +1,94 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiClock, FiSun } from 'react-icons/fi';
+import Preloader from './components/Preloader';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import About from './components/About';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Certificates from './components/Certificates';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+
+export default function Portfolio() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [weather, setWeather] = useState(null);
+  const [weatherError, setWeatherError] = useState(null);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Update time every second
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    // Fetch weather data
+    const fetchWeather = async () => {
+      try {
+        const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
+        if (!apiKey) {
+          throw new Error('Weather API key is not configured. Please check your .env.local file.');
+        }
+
+        const response = await fetch(
+          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Jakarta&aqi=no`
+        );
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          if (response.status === 401) {
+            throw new Error('Invalid or expired API key. Please check your WeatherAPI.com API key.');
+          }
+          throw new Error(`Failed to fetch weather data: ${errorData.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        // Transform the data to match our expected format
+        const transformedData = {
+          main: {
+            temp: data.current.temp_c
+          },
+          weather: [{
+            description: data.current.condition.text
+          }]
+        };
+        setWeather(transformedData);
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+        setWeatherError(error.message);
+      }
+    };
+
+    fetchWeather();
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(timeInterval);
+    };
+  }, []);
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <main className="min-h-screen">
+      <Navbar />
+      <Home currentTime={currentTime} weather={weather} weatherError={weatherError} />
+      <About />
+      <Skills />
+      <Projects />
+      <Certificates />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
