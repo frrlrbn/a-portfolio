@@ -77,9 +77,28 @@ export default function Skills() {
           viewport={{ once: true }}
           className="space-y-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-black text-center">
-            Skills & Expertise
-          </h2>
+          <div className="flex justify-center">
+            <motion.h2 
+              className="text-3xl sm:text-4xl font-bold text-black mb-4 relative inline-block text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="relative z-10">Skills & Expertise</span>
+              <motion.span
+                className="absolute bottom-0 left-0 w-full h-3 bg-yellow-500/20 -z-10"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.8,
+                  delay: 0.3,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+              />
+            </motion.h2>
+          </div>
 
           {/* Skills Charts */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

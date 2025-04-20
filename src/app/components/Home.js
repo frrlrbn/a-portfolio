@@ -99,7 +99,25 @@ export default function Home({ currentTime, weather, weatherError }) {
 
             <div className="space-y-8 relative z-10">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-black leading-tight">
-                Hi, I'm <span className="text-yellow-500">Azelin.</span>
+                Hi, I'm{' '}
+                <motion.span 
+                  className="text-yellow-500 relative inline-block"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  Azelin.
+                  <motion.span
+                    className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ 
+                      duration: 0.8,
+                      delay: 0.5,
+                      ease: [0.22, 1, 0.36, 1]
+                    }}
+                  />
+                </motion.span>
               </h1>
               <div className="h-20">
                 <motion.div

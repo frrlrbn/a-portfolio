@@ -38,9 +38,26 @@ export default function About() {
           {/* Right Column - Content */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-black mb-4">
+              <motion.h2 
+                className="text-3xl sm:text-4xl font-bold text-black mb-4 relative inline-block"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
                 About Me
-              </h2>
+                <motion.span
+                  className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.8,
+                    delay: 0.3,
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
+                />
+              </motion.h2>
               <p className="text-lg text-gray-600 leading-relaxed pb-6">
               Hi, I'm Azelin Azzahra, a student at SMK Negeri 2 Depok, Sleman, majoring in Industrial Automation Engineering. I've been passionate about robotics and design since I was 11, driven by a love for creativity and technology. I also enjoy art, sports, volunteering, and networking, as they help me stay active and connect with others. I'm enthusiastic about robotics competitions and innovation contests, always eager to learn, grow, and collaborate.
               </p>
@@ -64,6 +81,18 @@ export default function About() {
                   {link.icon}
                 </motion.a>
               ))}
+              <motion.a
+                href="/files/CV-AZELIN.pdf"
+                download
+                whileHover={{ scale: 1.1 }}
+                className="cartoon-outline bg-yellow-500 text-white p-4 rounded-full hover:bg-yellow-600 transition-colors duration-300 flex items-center gap-2"
+              >
+                <span className="sr-only">Download CV</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span className="font-medium">Download CV</span>
+              </motion.a>
             </div>
           </div>
         </motion.div>

@@ -39,11 +39,11 @@ export default function Footer() {
               className="inline-block"
             >
               <h3 className="text-3xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">
-                Azelin
+                Azelin Azzahra
               </h3>
             </motion.div>
             <p className="text-gray-400 leading-relaxed">
-              Professional portfolio showcasing skills and projects in assembly technology, graphic design, and digital writing.
+            Welcome to my portfolio — i'm a passionate student in Industrial Automation who loves robotics, design, and creative innovation.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((link) => (
@@ -93,7 +93,7 @@ export default function Footer() {
                 Interested in working together? Let's connect!
               </p>
               <motion.a
-                href="mailto:azelin@example.com"
+                href="mailto:azelinazzahra@gmail.com"
                 whileHover={{ scale: 1.05 }}
                 className="inline-block cartoon-outline bg-yellow-500 hover:bg-yellow-600 px-6 py-3 rounded-full text-black font-medium transition-colors duration-300"
               >
