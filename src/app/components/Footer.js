@@ -116,10 +116,23 @@ export default function Footer() {
           <FiArrowUp className="text-xl" />
         </motion.button>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center">
-          <p className="text-gray-400">
-            &copy; {new Date().getFullYear()} frrlrbn. All rights reserved.
-          </p>
+        <div className="border-t border-gray-800 mt-12 pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Copyright */}
+            <div className="text-center md:text-left">
+              <p className="text-gray-400">
+                &copy; {new Date().getFullYear()} frrlrbn. All rights reserved.
+              </p>
+            </div>
+            
+            {/* Credits */}
+            <div className="text-center md:text-right">
+              <p className="text-gray-400">
+              This website was developed through collaboration between <a href="https://frl.blue" target="_blank" rel="noopener noreferrer" className="text-yellow-500 hover:underline">frrlrbn</a> and <a href="/" className="text-yellow-500 hover:underline">azelin</a>
+              </p>
+              <br></br>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
