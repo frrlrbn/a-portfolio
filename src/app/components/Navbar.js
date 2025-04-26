@@ -14,30 +14,82 @@ const navItems = [
   { name: 'Contact', icon: <FiMail />, href: 'contact' },
 ];
 
+// Animation variants for mobile menu
+const mobileMenuVariants = {
+  closed: {
+    opacity: 0,
+    height: 0,
+    transition: {
+      duration: 0.3,
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+      when: "afterChildren"
+    }
+  },
+  open: {
+    opacity: 1,
+    height: "auto",
+    transition: {
+      duration: 0.3,
+      staggerChildren: 0.1,
+      staggerDirection: 1,
+      when: "beforeChildren"
+    }
+  }
+};
+
+// Animation variants for menu items
+const menuItemVariants = {
+  closed: { 
+    opacity: 0, 
+    x: -20,
+    transition: { duration: 0.2 }
+  },
+  open: { 
+    opacity: 1, 
+    x: 0,
+    transition: { 
+      type: "spring",
+      stiffness: 300,
+      damping: 24
+    }
+  }
+};
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
 
   // Custom navigation function
   const handleNavigation = (sectionId, e) => {
     e.preventDefault();
     
-    const element = document.getElementById(sectionId);
-    if (element) {
-      // Update URL without hash
-      window.history.pushState({}, '', `/${sectionId}`);
-      
-      // Scroll to element
-      element.scrollIntoView({ behavior: 'smooth' });
-      
-      // Update active section
-      setActiveSection(sectionId);
-      
-      // Close mobile menu if open
-      setIsOpen(false);
-    }
+    // Close mobile menu first
+    setIsOpen(false);
+    
+    // Set active section
+    setActiveSection(sectionId);
+    
+    // Use setTimeout to ensure the mobile menu is closed before scrolling
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        // Update URL without hash
+        window.history.pushState({}, '', `/${sectionId}`);
+        
+        // Scroll to element with offset
+        const offset = 80; // Adjust based on your navbar height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100); // Small delay to ensure smooth transition
   };
 
   useEffect(() => {
@@ -169,12 +221,36 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button
+            <motion.button
               onClick={() => setIsOpen(!isOpen)}
               className="cartoon-outline bg-white p-2 rounded-full"
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
             >
-              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-            </button>
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FiX size={24} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FiMenu size={24} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
         </div>
       </div>
@@ -183,29 +259,53 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={mobileMenuVariants}
             className="md:hidden bg-white/90 backdrop-blur-md"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            <div className="px-2 pt-2 pb-3 space-y-4 cartoon-outline">
               {navItems.map((item) => {
                 const isActive = activeSection === item.href;
                 return (
-                  <a
+                  <motion.a
                     key={item.name}
                     href="#"
                     onClick={(e) => handleNavigation(item.href, e)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium ${
+                    className={`cartoon-outline block px-3 py-3 rounded-md text-base font-medium ${
                       isActive ? 'bg-yellow-500 text-white' : 'text-gray-700 hover:bg-yellow-500 hover:text-white'
                     }`}
+                    variants={menuItemVariants}
+                    whileHover={{ 
+                      scale: 1.03,
+                      transition: { duration: 0.2 }
+                    }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <div className="flex items-center">
-                      <span className="mr-3">{item.icon}</span>
-                      {item.name}
+                      <motion.span 
+                        className="mr-3"
+                        animate={{ 
+                          rotate: isActive ? [0, 10, -10, 0] : 0 
+                        }}
+                        transition={{ 
+                          duration: 0.5,
+                          repeat: isActive ? 0 : Infinity,
+                          repeatType: "reverse"
+                        }}
+                      >
+                        {item.icon}
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 }}
+                      >
+                        {item.name}
+                      </motion.span>
                     </div>
-                  </a>
+                  </motion.a>
                 );
               })}
             </div>
