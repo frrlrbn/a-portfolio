@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiClock, FiSun, FiCpu, FiSettings, FiTool, FiCode, FiLayers, FiCpu as FiChip } from 'react-icons/fi';
+import { FiClock, FiSun, FiSunrise, FiSunset, FiMoon, FiCpu, FiSettings, FiTool, FiCode, FiLayers, FiCpu as FiChip } from 'react-icons/fi';
 
 const roles = [
   'Automation Engineer',
@@ -229,7 +229,18 @@ export default function Home({ currentTime, weather, weatherError }) {
             >
               <div className="widget-content">
                 <div className="flex items-center space-x-4">
-                  <FiSun className="text-yellow-500" size={28} />
+                  {(() => {
+                    const hour = currentTime.getHours();
+                    if (hour >= 5 && hour < 11) {
+                      return <FiSunrise className="text-yellow-500" size={28} />;
+                    } else if (hour >= 11 && hour < 15) {
+                      return <FiSun className="text-yellow-500" size={28} />;
+                    } else if (hour >= 15 && hour < 18) {
+                      return <FiSunset className="text-yellow-500" size={28} />;
+                    } else {
+                      return <FiMoon className="text-yellow-500" size={28} />;
+                    }
+                  })()}
                   <div>
                     {weatherError ? (
                       <p className="text-red-500 text-lg font-medium">Error loading weather</p>

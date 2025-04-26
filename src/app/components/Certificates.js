@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiX, FiChevronLeft, FiChevronRight, FiDownload } from 'react-icons/fi';
 
 const certificates = [
   {
@@ -13,7 +13,7 @@ const certificates = [
   },
   {
     title: 'Certificate 2',
-    image: '/images/sertifikat-2.jpg',
+    image: '/images/sertifikat-2.png',
     description: 'Certificate of Achievement',
     date: '2023',
   },
@@ -177,6 +177,17 @@ export default function Certificates() {
     }
   };
 
+  const handleDownload = (e) => {
+    e.stopPropagation();
+    const link = document.createElement('a');
+    link.href = certificates[currentIndex].image;
+    const fileExtension = certificates[currentIndex].image.split('.').pop().toLowerCase();
+    link.download = `azelin-certificate-${currentIndex + 1}.${fileExtension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section id="certificates" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -270,15 +281,7 @@ export default function Certificates() {
                   className="cartoon-outline bg-white p-4 sm:p-6 max-w-2xl w-full mx-4"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <motion.h3 
-                      className="text-xl sm:text-2xl font-bold"
-                      initial={{ y: -20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      {certificates[currentIndex].title}
-                    </motion.h3>
+                  <div className="flex justify-end mb-2">
                     <motion.button
                       onClick={() => setIsModalOpen(false)}
                       whileHover={{ rotate: 90 }}
@@ -291,7 +294,7 @@ export default function Certificates() {
                   <motion.img 
                     src={certificates[currentIndex].image} 
                     alt={certificates[currentIndex].title}
-                    className="w-full h-auto max-h-[60vh] sm:max-h-[70vh] object-contain rounded-lg"
+                    className="w-full h-auto max-h-[70vh] sm:max-h-[80vh] object-contain rounded-lg cartoon-outline"
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
@@ -300,13 +303,17 @@ export default function Certificates() {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
+                    className="flex justify-center mt-4"
                   >
-                    <p className="text-gray-600 mb-2 mt-4 text-sm sm:text-base">
-                      {certificates[currentIndex].description}
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-500">
-                      Date: {certificates[currentIndex].date}
-                    </p>
+                    <motion.button
+                      onClick={handleDownload}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-yellow-600 transition-colors cartoon-outline"
+                    >
+                      <FiDownload size={20} />
+                      <span>Download Certificate</span>
+                    </motion.button>
                   </motion.div>
                 </motion.div>
               </motion.div>

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiChevronDown, FiChevronUp, FiX } from 'react-icons/fi';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { FiChevronDown, FiChevronUp, FiX, FiInfo } from 'react-icons/fi';
 
 const projects = [
   {
@@ -65,6 +65,12 @@ const projects = [
     category: 'Editing',
     size: 'medium',
   },
+  {
+    title: 'Poster Hari Kartini 2025',
+    image: '/images/projects-poster-11.png',
+    category: 'Poster',
+    size: 'medium',
+  },
 ];
 
 export default function Projects() {
@@ -74,6 +80,9 @@ export default function Projects() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
 
   useEffect(() => {
     const checkMobile = () => {
@@ -89,6 +98,29 @@ export default function Projects() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, [isExpanded]);
+
+  useEffect(() => {
+    let tooltipTimer;
+    let hideTooltipTimer;
+    
+    if (isInView) {
+      // Show tooltip immediately when section comes into view
+      setShowTooltip(true);
+      
+      // Hide tooltip after 5 seconds
+      hideTooltipTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 3000);
+    } else {
+      // Hide tooltip when section is out of view
+      setShowTooltip(false);
+    }
+
+    return () => {
+      clearTimeout(tooltipTimer);
+      clearTimeout(hideTooltipTimer);
+    };
+  }, [isInView]);
 
   const toggleProjects = () => {
     setIsExpanded(!isExpanded);
@@ -138,7 +170,7 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <section id="projects" className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50" ref={sectionRef}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -169,6 +201,24 @@ export default function Projects() {
               />
             </motion.h2>
           </div>
+
+          {/* Tooltip */}
+          <AnimatePresence>
+            {showTooltip && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="absolute left-1/2 transform -translate-x-1/2 z-5 -mt-5"
+              >
+                <div className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 cartoon-outline">
+                  <FiInfo className="text-white" size={18} />
+                  <span className="text-sm font-medium">Tips: You can click the image to view the full image</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             {projects.slice(0, visibleProjects).map((project, index) => (

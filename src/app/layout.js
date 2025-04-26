@@ -9,8 +9,8 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  title: 'Azelin | Portfolio',
-  description: 'Portfolio website showcasing my work and skills',
+  title: 'Azelin Azzahra | Portfolio',
+  description: 'Welcome to my portfolio — im a passionate student in Industrial Automation who loves robotics, design, and creative innovation.',
 };
 
 export default function RootLayout({ children }) {

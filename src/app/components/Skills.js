@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FiCpu, FiPenTool, FiEdit, FiTool, FiUsers, FiBook } from 'react-icons/fi';
+import { FiCpu, FiPenTool, FiEdit, FiTool } from 'react-icons/fi';
 import Image from 'next/image';
 
 const skills = [
   {
-    name: 'Assembly Technician',
+    name: 'Digital Writer',
     icon: <FiCpu />,
     level: 90,
     color: 'bg-yellow-500',
@@ -18,7 +18,7 @@ const skills = [
     color: 'bg-yellow-500',
   },
   {
-    name: 'Digital Writer',
+    name: 'Assembly Technician',
     icon: <FiEdit />,
     level: 80,
     color: 'bg-yellow-500',
@@ -64,6 +64,16 @@ const techStack = [
     icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Arduino_Logo.svg/1200px-Arduino_Logo.svg.png',
     alt: 'Arduino Logo'
   },
+  {
+    name: 'Ibis Paint',
+    icon: 'https://i.pinimg.com/736x/66/fb/72/66fb72c44a7b547237f7a3bd7159a01c.jpg',
+    alt: 'Ibis Paint Logo'
+  },
+  {
+    name: 'Krita',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Calligrakrita-base.svg/330px-Calligrakrita-base.svg.png',
+    alt: 'Krita Logo'
+  }
 ];
 
 export default function Skills() {

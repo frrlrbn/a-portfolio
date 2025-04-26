@@ -2,12 +2,15 @@
 
 import { motion } from 'framer-motion';
 import { FiInstagram, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
+import { FaTiktok } from "react-icons/fa";
 
 const socialLinks = [
   { icon: <FiInstagram />, url: 'https://instagram.com/azelyneazara', label: 'Instagram' },
   { icon: <FiInstagram />, url: 'https://instagram.com/designsocietyy', label: 'Instagrams' },
+  { icon: <FaTiktok />, url: 'https://www.tiktok.com/@azelyneazz', label: 'Tiktok' },
+  { icon: <FaTiktok />, url: 'https://www.tiktok.com/@designsocietyy', label: 'Tiktoks' },
   { icon: <FiLinkedin />, url: 'https://www.linkedin.com/in/azelin-azzahra-6bba45333/', label: 'LinkedIn' },
-  { icon: <FiMail />, url: 'mailto:azelinazzahra@gmail.com', label: 'Email' },
+  { icon: <FiMail />, url: 'mailto:azelinazzahra@gmail.com', label: 'Email' }
 ];
 
 export default function Footer() {
