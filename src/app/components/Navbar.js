@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiHome, FiUser, FiCode, FiBriefcase, FiAward, FiMail } from 'react-icons/fi';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
   { name: 'Home', icon: <FiHome />, href: 'home' },
@@ -61,89 +62,60 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const isNavigating = useRef(false);
+  const router = useRouter();
 
-  // Custom navigation function
-  const handleNavigation = (sectionId, e) => {
-    e.preventDefault();
-    
-    // Close mobile menu first
-    setIsOpen(false);
-    
-    // Set active section
-    setActiveSection(sectionId);
-    
-    // Use setTimeout to ensure the mobile menu is closed before scrolling
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
+  const handleNavigation = (section, e) => {
+    if (e) e.preventDefault();
+
+    setActiveSection(section);
+
+    if (section === 'home') {
+      router.push('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.getElementById(section);
       if (element) {
-        // Update URL without hash
-        window.history.pushState({}, '', `/${sectionId}`);
-        
-        // Scroll to element with offset
-        const offset = 80; // Adjust based on your navbar height
+        const offset = 80; // navbar height
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
-        
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
         });
       }
-    }, 100); // Small delay to ensure smooth transition
+    }
+    setIsOpen(false);
   };
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      
-      // Update active section based on scroll position
+
+      if (isNavigating.current) return;
+
       const sections = navItems.map(item => item.href);
       const scrollPosition = window.scrollY + 100;
-      
+
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const { offsetTop, offsetHeight } = element;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section);
-            // Update URL without hash
-            window.history.replaceState({}, '', `/${section}`);
             break;
           }
         }
       }
     };
-    
-    // Handle browser back/forward buttons
-    const handlePopState = () => {
-      const path = window.location.pathname.substring(1);
-      if (path && navItems.some(item => item.href === path)) {
-        const element = document.getElementById(path);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-          setActiveSection(path);
-        }
-      }
-    };
-    
+
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('popstate', handlePopState);
-    
-    // Check if there's a section in the URL on initial load
-    const path = window.location.pathname.substring(1);
-    if (path && navItems.some(item => item.href === path)) {
-      const element = document.getElementById(path);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-          setActiveSection(path);
-        }, 100);
-      }
-    }
-    
+
+    // Initial check
+    handleScroll();
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('popstate', handlePopState);
     };
   }, []);
 
@@ -162,8 +134,8 @@ export default function Navbar() {
             className="flex-shrink-0"
           >
             <a 
-              href="#" 
-              onClick={(e) => handleNavigation('home', e)} 
+              href="#home"
+              onClick={(e) => handleNavigation('home')} 
               className="flex items-center"
             >
               <div className="cartoon-outline bg-white px-6 py-2 rounded-full">
@@ -186,7 +158,7 @@ export default function Navbar() {
                     transition={{ delay: index * 0.1 }}
                   >
                     <a
-                      href="#"
+                      href="/"
                       onClick={(e) => handleNavigation(item.href, e)}
                       className="relative group"
                       onMouseEnter={() => setHoveredItem(item.href)}
@@ -271,7 +243,7 @@ export default function Navbar() {
                 return (
                   <motion.a
                     key={item.name}
-                    href="#"
+                    href="/"
                     onClick={(e) => handleNavigation(item.href, e)}
                     className={`cartoon-outline block px-3 py-3 rounded-md text-base font-medium ${
                       isActive ? 'bg-yellow-500 text-white' : 'text-gray-700 hover:bg-yellow-500 hover:text-white'
