@@ -2,7 +2,7 @@
 @tailwind utilities;
 
 :root {
-  --primary: #FFD700;
+  --primary: #1c1c84;
   --secondary: #333333;
   --accent: #666666;
   --background: #FFFFFF;
@@ -50,6 +50,12 @@ p {
   border: 4px solid black;
   border-radius: 0.5rem;
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.cartoon-outline-white {
+  border: 4px solid white;
+  border-radius: 0.5rem;
+  box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 1);
 }
 
 .hover-scale {

@@ -9,7 +9,7 @@ const projects = [
     title: 'Poster Jumat Bersih Stembayo',
     image: '/images/projects-poster-1.png',
     category: 'Poster',
-    size: 'medium',
+    size: 'large',
   },
   {
     title: 'Struktur Pengurus Organisasi',
@@ -27,7 +27,7 @@ const projects = [
     title: 'Poster Event',
     image: '/images/projects-poster-4.png',
     category: 'Poster',
-    size: 'medium',
+    size: 'tall',
   },
   {
     title: 'Design Template Instagram 2025',
@@ -39,7 +39,7 @@ const projects = [
     title: 'Design Polaroid',
     image: '/images/projects-poster-6.jpg',
     category: 'Design',
-    size: 'medium',
+    size: 'wide',
   },
   {
     title: 'Poster Imlek 2025',
@@ -51,7 +51,7 @@ const projects = [
     title: 'Design Template Instagram Christmas 2024',
     image: '/images/projects-poster-8.jpg',
     category: 'Design',
-    size: 'medium',
+    size: 'tall',
   },
   {
     title: 'Daniel Caesar Album Cover Edit',
@@ -75,9 +75,6 @@ const projects = [
 
 export default function Projects() {
   const [hoveredProject, setHoveredProject] = useState(null);
-  const [visibleProjects, setVisibleProjects] = useState(2);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -85,47 +82,21 @@ export default function Projects() {
   const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setVisibleProjects(projects.length);
-      } else {
-        setVisibleProjects(isExpanded ? projects.length : 2);
-      }
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, [isExpanded]);
-
-  useEffect(() => {
-    let tooltipTimer;
     let hideTooltipTimer;
     
     if (isInView) {
-      // Show tooltip immediately when section comes into view
       setShowTooltip(true);
-      
-      // Hide tooltip after 5 seconds
       hideTooltipTimer = setTimeout(() => {
         setShowTooltip(false);
       }, 3000);
     } else {
-      // Hide tooltip when section is out of view
       setShowTooltip(false);
     }
 
     return () => {
-      clearTimeout(tooltipTimer);
       clearTimeout(hideTooltipTimer);
     };
   }, [isInView]);
-
-  const toggleProjects = () => {
-    setIsExpanded(!isExpanded);
-    setVisibleProjects(isExpanded ? 2 : projects.length);
-  };
 
   const openModal = (project) => {
     setSelectedProject(project);
@@ -137,26 +108,39 @@ export default function Projects() {
     setSelectedProject(null);
   };
 
+  const getBentoClass = (size) => {
+    switch(size) {
+      case 'large':
+        return 'md:col-span-2 md:row-span-2';
+      case 'wide':
+        return 'md:col-span-2';
+      case 'tall':
+        return 'md:row-span-2';
+      default:
+        return '';
+    }
+  };
+
   const modalVariants = {
     hidden: {
       opacity: 0,
-      scale: 0.8,
-      rotate: -5
+      scale: 0.85,
+      y: 20
     },
     visible: {
       opacity: 1,
       scale: 1,
-      rotate: 0,
+      y: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 25
+        stiffness: 260,
+        damping: 20
       }
     },
     exit: {
       opacity: 0,
-      scale: 0.8,
-      rotate: 5,
+      scale: 0.9,
+      y: 10,
       transition: {
         duration: 0.2
       }
@@ -165,8 +149,14 @@ export default function Projects() {
 
   const overlayVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-    exit: { opacity: 0 }
+    visible: { 
+      opacity: 1,
+      transition: { duration: 0.2 }
+    },
+    exit: { 
+      opacity: 0,
+      transition: { duration: 0.2 }
+    }
   };
 
   return (
@@ -189,7 +179,7 @@ export default function Projects() {
             >
               Projects
               <motion.span
-                className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500"
+                className="absolute bottom-0 left-0 w-full h-1 bg-[#1c1c84]"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
@@ -202,97 +192,65 @@ export default function Projects() {
             </motion.h2>
           </div>
 
-          {/* Tooltip */}
-          <AnimatePresence>
-            {showTooltip && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="absolute left-1/2 transform -translate-x-1/2 z-5 -mt-5"
-              >
-                <div className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 cartoon-outline">
-                  <FiInfo className="text-white" size={18} />
-                  <span className="text-sm font-medium">Tips: You can click the image to view the full image</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-            {projects.slice(0, visibleProjects).map((project, index) => (
+          {/* Bento Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] gap-3 md:gap-4">
+            {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ 
+                  duration: 0.4, 
+                  delay: index * 0.05,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
                 viewport={{ once: true }}
-                className={`relative ${
-                  project.size === 'large' 
-                    ? 'sm:col-span-2 lg:col-span-2' 
-                    : ''
-                }`}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className={`relative group cursor-pointer ${getBentoClass(project.size)}`}
+                onClick={() => openModal(project)}
                 onHoverStart={() => setHoveredProject(project.title)}
                 onHoverEnd={() => setHoveredProject(null)}
               >
-                <div 
-                  className="cartoon-outline bg-white p-3 h-full w-full cursor-pointer"
-                  onClick={() => openModal(project)}
-                >
-                  <div className={`w-full ${
-                    project.size === 'large' 
-                      ? 'aspect-[16/9] sm:aspect-[16/9]' 
-                      : 'aspect-square'
-                  } rounded-lg overflow-hidden`}>
+                <div className="cartoon-outline bg-white p-2 h-full w-full rounded-2xl overflow-hidden">
+                  <div className="relative w-full h-full rounded-xl overflow-hidden">
                     <img 
                       src={project.image} 
                       alt={project.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
+                    
+                    {/* Gradient Overlay */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: hoveredProject === project.title ? 1 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4"
+                    >
+                      <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ 
+                          y: hoveredProject === project.title ? 0 : 20,
+                          opacity: hoveredProject === project.title ? 1 : 0 
+                        }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      >
+                        <h3 className="text-white text-sm md:text-base font-bold mb-1 line-clamp-2">
+                          {project.title}
+                        </h3>
+                        <span className="inline-block bg-[#1c1c84] text-white text-xs px-2 py-1 rounded-full font-medium">
+                          {project.category}
+                        </span>
+                      </motion.div>
+                    </motion.div>
                   </div>
                 </div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: hoveredProject === project.title ? 1 : 0,
-                  }}
-                  className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg cursor-pointer"
-                  onClick={() => openModal(project)}
-                >
-                  <div className="text-center p-3">
-                    <h3 className="text-white text-lg font-semibold mb-1">
-                      {project.title}
-                    </h3>
-                    <span className="text-yellow-500 text-sm font-medium">
-                      {project.category}
-                    </span>
-                  </div>
-                </motion.div>
               </motion.div>
             ))}
           </div>
-
-          {/* View More Button - Mobile Only */}
-          {isMobile && (
-            <div className="flex justify-center mt-6">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleProjects}
-                className="cartoon-outline bg-white px-6 py-3 rounded-full flex items-center space-x-2"
-              >
-                <span className="font-medium">
-                  {isExpanded ? 'Show Less' : 'View More'}
-                </span>
-                {isExpanded ? <FiChevronUp /> : <FiChevronDown />}
-              </motion.button>
-            </div>
-          )}
         </motion.div>
       </div>
 
-      {/* Modal */}
+      {/* Enhanced Modal */}
       <AnimatePresence>
         {isModalOpen && selectedProject && (
           <motion.div
@@ -300,8 +258,7 @@ export default function Projects() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50"
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-50"
             onClick={closeModal}
           >
             <motion.div
@@ -309,26 +266,44 @@ export default function Projects() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative max-w-4xl w-full bg-white rounded-lg overflow-hidden cartoon-outline"
+              className="relative max-w-5xl w-full bg-white rounded-2xl overflow-hidden cartoon-outline"
               onClick={(e) => e.stopPropagation()}
             >
-              <motion.button
-                onClick={closeModal}
-                whileHover={{ rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                className="absolute top-4 right-4 text-black rounded-full p-2 hover:bg-gray-100 transition-colors z-10"
-              >
-                <FiX size={24} />
-              </motion.button>
-              <motion.img
-                src={selectedProject.image}
-                alt={selectedProject.title}
-                className="w-full h-auto max-h-[90vh] object-contain"
-                variants={modalVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              />
+              {/* Modal Header */}
+              <div className="bg-[#1c1c84] p-4 flex justify-between items-center">
+                <div>
+                  <h3 className="text-white font-bold text-lg md:text-xl">
+                    {selectedProject.title}
+                  </h3>
+                  <span className="inline-block bg-white/20 text-white text-xs md:text-sm px-3 py-1 rounded-full font-medium mt-1">
+                    {selectedProject.category}
+                  </span>
+                </div>
+                <motion.button
+                  onClick={closeModal}
+                  whileHover={{ rotate: 90, scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="bg-white text-[#1c1c84] rounded-full p-2 hover:bg-gray-100 transition-colors"
+                >
+                  <FiX size={24} />
+                </motion.button>
+              </div>
+
+              {/* Modal Image */}
+              <div className="bg-gray-50 p-4 md:p-6">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="cartoon-outline bg-white p-2 rounded-xl"
+                >
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="w-full h-auto max-h-[70vh] object-contain rounded-xl"
+                  />
+                </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiChevronLeft, FiChevronRight, FiDownload } from 'react-icons/fi';
+import { useRef } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { FiDownload } from 'react-icons/fi';
 
 const certificates = [
   {
@@ -74,131 +74,30 @@ const certificates = [
 ];
 
 export default function Certificates() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const scrollContainerRef = useRef(null);
+  const sectionHeight = certificates.length * 120;
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { scrollYProgress } = useScroll({
+    target: scrollContainerRef,
+    offset: ['start start', 'end end'],
+  });
 
-  const nextCertificate = () => {
-    setCurrentIndex((prev) => (prev + 1) % certificates.length);
-  };
+  const stackedProgress = useTransform(scrollYProgress, [0, 1], [0, certificates.length - 1]);
+  const smoothStackedProgress = useSpring(stackedProgress, {
+    stiffness: 140,
+    damping: 28,
+    mass: 0.8,
+  });
 
-  const prevCertificate = () => {
-    setCurrentIndex((prev) => (prev - 1 + certificates.length) % certificates.length);
-  };
-
-  const mobileVariants = {
-    enter: {
-      scale: 0.8,
-      opacity: 0,
-      rotateY: 90,
-      transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1]
-      }
-    },
-    center: {
-      scale: 1,
-      opacity: 1,
-      rotateY: 0,
-      transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1]
-      }
-    },
-    exit: {
-      scale: 0.8,
-      opacity: 0,
-      rotateY: -90,
-      transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1]
-      }
-    }
-  };
-
-  const desktopVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 50 : -50,
-      opacity: 0,
-      scale: 0.95
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 30
-      }
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? 50 : -50,
-      opacity: 0,
-      scale: 0.95,
-      transition: {
-        duration: 0.2
-      }
-    })
-  };
-
-  const modalVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.8,
-      rotate: -5
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      rotate: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 25
-      }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      rotate: 5,
-      transition: {
-        duration: 0.2
-      }
-    }
-  };
-
-  const handleDownload = (e) => {
-    e.stopPropagation();
-    const link = document.createElement('a');
-    link.href = certificates[currentIndex].image;
-    const fileExtension = certificates[currentIndex].image.split('.').pop().toLowerCase();
-    link.download = `azelin-certificate-${currentIndex + 1}.${fileExtension}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const sectionProgress = useSpring(scrollYProgress, {
+    stiffness: 160,
+    damping: 26,
+  });
+  const progressHeight = useTransform(sectionProgress, (value) => `${value * 100}%`);
 
   return (
-    <section id="certificates" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="space-y-12"
-        >
-          <div className="flex justify-center">
+    <section id="certificates" className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-center">
             <motion.h2 
               className="text-3xl sm:text-4xl font-bold text-black mb-4 relative inline-block text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -206,9 +105,9 @@ export default function Certificates() {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <span className="relative z-10">Certificates</span>
+              <span className="relative z-10">Skills & Expertise</span>
               <motion.span
-                className="absolute bottom-0 left-0 w-full h-3 bg-yellow-500/20 -z-10"
+                className="absolute bottom-0 left-0 w-full h-3 bg-[#1c1c84]/20 -z-10"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
@@ -221,106 +120,109 @@ export default function Certificates() {
             </motion.h2>
           </div>
 
-          <div className="relative">
-            <div className="aspect-video mx-auto max-w-2xl relative">
-              <AnimatePresence initial={false} mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  variants={isMobile ? mobileVariants : desktopVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 cartoon-outline bg-white p-4 cursor-pointer hover:scale-[1.02] transition-transform duration-300"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <motion.img 
-                    src={certificates[currentIndex].image} 
-                    alt={certificates[currentIndex].title}
-                    className="w-full h-full object-contain rounded-lg"
-                    initial={{ scale: 0.95 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                </motion.div>
-              </AnimatePresence>
+      <div
+        ref={scrollContainerRef}
+        className="relative max-w-6xl mx-auto"
+        style={{ height: `${sectionHeight}vh` }}
+      >
+        <div className="sticky top-24 md:top-28 h-[calc(100vh-7rem)] md:h-[calc(100vh-8rem)]">
+          <div className="relative h-full flex items-center justify-center">
+            <div className="absolute -left-2 sm:-left-6 top-0 bottom-0 flex flex-col items-center">
+              <span className="hidden sm:block w-px h-full bg-slate-200" />
+              <motion.span
+                aria-hidden
+                style={{ height: progressHeight }}
+                className="hidden sm:block absolute left-0 top-0 w-[3px] rounded-full bg-[#1c1c84]"
+              />
             </div>
 
-            <motion.button
-              onClick={prevCertificate}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white cartoon-outline shadow-lg"
-            >
-              <FiChevronLeft size={24} />
-            </motion.button>
-            <motion.button
-              onClick={nextCertificate}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white cartoon-outline shadow-lg"
-            >
-              <FiChevronRight size={24} />
-            </motion.button>
+            <div className="relative w-full max-w-4xl h-[72vh] sm:h-[65vh]">
+              {certificates.map((certificate, index) => (
+                <CertificateCard
+                  key={certificate.title}
+                  certificate={certificate}
+                  index={index}
+                  total={certificates.length}
+                  progress={smoothStackedProgress}
+                />
+              ))}
+            </div>
           </div>
-
-          <AnimatePresence>
-            {isModalOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <motion.div
-                  variants={modalVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="cartoon-outline bg-white p-4 sm:p-6 max-w-2xl w-full mx-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="flex justify-end mb-2">
-                    <motion.button
-                      onClick={() => setIsModalOpen(false)}
-                      whileHover={{ rotate: 90 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                      <FiX size={24} />
-                    </motion.button>
-                  </div>
-                  <motion.img 
-                    src={certificates[currentIndex].image} 
-                    alt={certificates[currentIndex].title}
-                    className="w-full h-auto max-h-[70vh] sm:max-h-[80vh] object-contain rounded-lg cartoon-outline"
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.3 }}
-                  />
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="flex justify-center mt-4"
-                  >
-                    <motion.button
-                      onClick={handleDownload}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-yellow-600 transition-colors cartoon-outline"
-                    >
-                      <FiDownload size={20} />
-                      <span>Download Certificate</span>
-                    </motion.button>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
-} 
+}
+
+function CertificateCard({ certificate, index, total, progress }) {
+  const verticalOffset = 70;
+  const y = useTransform(progress, (value) => `${(index - value) * verticalOffset}vh`);
+
+  const scale = useTransform(progress, (value) => {
+    const distance = Math.abs(index - value);
+    const clamped = Math.min(distance, 1.5);
+    return 1 - clamped * 0.08;
+  });
+
+  const rotate = useTransform(progress, (value) => {
+    const distance = index - value;
+    return `${distance * -1.5}deg`;
+  });
+
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = certificate.image;
+    const fileExtension = certificate.image.split('.').pop()?.toLowerCase() ?? 'jpg';
+    link.download = `certificate-${index + 1}.${fileExtension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <motion.article
+      aria-label={`${certificate.title} certificate`}
+      style={{ y, scale, rotate, zIndex: total - index }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+    >
+      <motion.div
+        className="pointer-events-auto w-full max-w-3xl"
+        initial={{ opacity: 0, scale: 0.94 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="cartoon-outline bg-white/95 backdrop-blur-sm border-4 border-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
+            <div className="w-full md:w-2/3 aspect-[4/3] bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center shadow-inner">
+              <img
+                src={certificate.image}
+                alt={certificate.title}
+                className="h-full w-full object-contain"
+              />
+            </div>
+
+            <div className="w-full md:w-1/3 space-y-5">
+              <div className="space-y-2">
+                <span className="text-sm font-semibold text-slate-500">{certificate.date}</span>
+                <h3 className="text-2xl font-bold text-slate-900 leading-snug">{certificate.title}</h3>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  {certificate.description}
+                </p>
+              </div>
+
+              <motion.button
+                onClick={handleDownload}
+                whileHover={{ scale: 1.03, translateY: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="cartoon-outline flex items-center justify-center gap-2 rounded-xl bg-[#1c1c84] text-white px-4 py-3 font-semibold shadow-lg hover:bg-[#151560] transition-colors"
+              >
+                <FiDownload size={18} />
+                <span>Download</span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.article>
+  );
+}

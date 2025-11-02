@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiClock, FiSun, FiSunrise, FiSunset, FiMoon, FiCpu, FiSettings, FiTool, FiCode, FiLayers, FiCpu as FiChip } from 'react-icons/fi';
+import { FiClock, FiSun, FiSunrise, FiSunset, FiMoon, FiCpu, FiSettings, FiTool, FiCode, FiLayers, FiCpu as FiChip, FiArrowRight} from 'react-icons/fi';
 
 const roles = [
   'Automation Engineer',
@@ -90,7 +90,7 @@ export default function Home({ currentTime, weather, weatherError }) {
                     ease: "easeInOut",
                     delay: index * 0.2
                   }}
-                  className="absolute text-yellow-500/60"
+                  className="absolute text-[#1c1c84]/60"
                 >
                   {icon.icon}
                 </motion.div>
@@ -101,14 +101,14 @@ export default function Home({ currentTime, weather, weatherError }) {
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-black leading-tight">
                 Hi, I'm{' '}
                 <motion.span 
-                  className="text-yellow-500 relative inline-block"
+                  className="text-[#1c1c84] relative inline-block"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
                   Azelin.
                   <motion.span
-                    className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500"
+                    className="absolute bottom-0 left-0 w-full h-1 bg-[#1c1c84]"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ 
@@ -126,7 +126,7 @@ export default function Home({ currentTime, weather, weatherError }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="text-3xl sm:text-4xl text-yellow-500 font-semibold"
+                  className="text-3xl sm:text-4xl text-[#1c1c84] font-semibold"
                 >
                   {roles[currentRoleIndex]}
                 </motion.div>
@@ -134,6 +134,33 @@ export default function Home({ currentTime, weather, weatherError }) {
               <p className="text-xl text-gray-600 leading-relaxed">
               Welcome to my portfolio — i'm a passionate student in Industrial Automation who loves robotics, design, and creative innovation.
               </p>
+
+              {/* CTA Buttons */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+                className="flex flex-wrap gap-4"
+              >
+                <motion.a
+                  href="#projects"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="cartoon-outline bg-[#1c1c84] text-white px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-[#151560] transition-colors duration-300"
+                >
+                  View My Work
+                  <FiArrowRight className="text-xl" />
+                </motion.a>
+                <motion.a
+                  href="#contact"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="cartoon-outline bg-white text-[#333333] px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-gray-50 transition-colors duration-300"
+                >
+                  Get in Touch
+                </motion.a>
+              </motion.div>
+
             </div>
           </motion.div>
 
@@ -205,18 +232,69 @@ export default function Home({ currentTime, weather, weatherError }) {
             {/* Clock Widget */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="widget cartoon-outline col-span-2"
+              className="widget cartoon-outline col-span-2 relative overflow-hidden"
             >
-              <div className="widget-content">
-                <div className="flex items-center space-x-4">
-                  <FiClock className="text-yellow-500" size={28} />
-                  <div className="flex flex-col">
-                    <span className="text-2xl font-bold tracking-wider">
-                      {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                    <span className="text-sm text-gray-500 font-medium">
-                      {currentTime.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                    </span>
+              {/* Subtle Background Glow */}
+              <motion.div
+                animate={{
+                  opacity: [0.05, 0.1, 0.05]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute top-0 right-0 w-20 h-20 bg-[#1c1c84] rounded-full blur-3xl"
+              />
+
+              <div className="widget-content relative z-10">
+                <div className="flex items-center gap-4 w-full">
+                  {/* Clock Icon */}
+                  <motion.div
+                    animate={{
+                      rotate: [0, 3, 0, -3, 0]
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="bg-gradient-to-br from-[#1c1c84] to-[#2525a8] p-3 rounded-2xl cartoon-outline relative"
+                  >
+                    <FiClock className="text-white" size={28} />
+                  </motion.div>
+
+                  {/* Time and Date */}
+                  <div className="flex-1">
+                    {/* Time */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex items-center gap-0.5"
+                    >
+                      {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).split(':').map((part, index) => (
+                        <span key={index} className="text-2xl font-bold text-[#333333]">
+                          {part}
+                          {index === 0 && (
+                            <motion.span>
+                              :
+                            </motion.span>
+                          )}
+                        </span>
+                      ))}
+                    </motion.div>
+
+                    {/* Date in compact tag style */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="flex items-center gap-2 mt-1"
+                    >
+                      <span className="text-xs font-medium text-gray-600">
+                        {currentTime.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
+                    </motion.div>
                   </div>
                 </div>
               </div>
@@ -225,44 +303,92 @@ export default function Home({ currentTime, weather, weatherError }) {
             {/* Weather Widget */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="widget cartoon-outline col-span-2"
+              className="widget cartoon-outline col-span-2 relative overflow-hidden"
             >
-              <div className="widget-content">
-                <div className="flex items-center space-x-4">
-                  {(() => {
-                    const hour = currentTime.getHours();
-                    if (hour >= 5 && hour < 11) {
-                      return <FiSunrise className="text-yellow-500" size={28} />;
-                    } else if (hour >= 11 && hour < 15) {
-                      return <FiSun className="text-yellow-500" size={28} />;
-                    } else if (hour >= 15 && hour < 18) {
-                      return <FiSunset className="text-yellow-500" size={28} />;
-                    } else {
-                      return <FiMoon className="text-yellow-500" size={28} />;
-                    }
-                  })()}
-                  <div>
+              {/* Subtle Background Glow */}
+              <motion.div
+                animate={{
+                  opacity: [0.05, 0.1, 0.05]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute top-0 right-0 w-20 h-20 bg-[#1c1c84] rounded-full blur-3xl"
+              />
+
+              <div className="widget-content relative z-10">
+                <div className="flex items-center gap-3 w-full">
+                  {/* Weather Icon */}
+                  <motion.div
+                    animate={{
+                      rotate: [0, 3, 0, -3, 0]
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="bg-gradient-to-br from-[#1c1c84] to-[#2525a8] p-3 rounded-2xl cartoon-outline"
+                  >
+                    {(() => {
+                      const hour = currentTime.getHours();
+                      if (hour >= 5 && hour < 11) {
+                        return <FiSunrise className="text-white" size={28} />;
+                      } else if (hour >= 11 && hour < 15) {
+                        return <FiSun className="text-white" size={28} />;
+                      } else if (hour >= 15 && hour < 18) {
+                        return <FiSunset className="text-white" size={28} />;
+                      } else {
+                        return <FiMoon className="text-white" size={28} />;
+                      }
+                    })()}
+                  </motion.div>
+
+                  {/* Weather Info */}
+                  <div className="flex-1">
                     {weatherError ? (
-                      <p className="text-red-500 text-lg font-medium">Error loading weather</p>
+                      <p className="text-red-500 text-sm font-medium">Error loading</p>
                     ) : weather ? (
-                      <>
-                        <div className="flex items-baseline space-x-1">
-                          <span className="text-2xl font-bold tracking-wider">
+                      <div className="flex items-center justify-between">
+                        {/* Temperature */}
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                          className="flex items-baseline gap-1"
+                        >
+                          <span className="text-2xl font-bold text-[#333333]">
                             {Math.round(weather.main.temp)}°
                           </span>
-                          <span className="text-lg text-gray-500 font-medium">C</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-600 font-medium capitalize">
+                          <span className="text-sm text-gray-500 font-medium">C</span>
+                        </motion.div>
+
+                        {/* Description */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.2 }}
+                          className="text-right"
+                        >
+                          <span className="text-xs text-gray-600 font-medium capitalize block">
                             {weather.weather[0].description}
                           </span>
                           <span className="text-xs text-gray-400">
-                            Sleman • Indonesia
+                            Sleman, ID
                           </span>
-                        </div>
-                      </>
+                        </motion.div>
+                      </div>
                     ) : (
-                      <p className="text-lg font-medium text-gray-600">Loading weather...</p>
+                      <div className="flex items-center gap-2">
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-4 h-4 border-2 border-[#1c1c84] border-t-transparent rounded-full"
+                        />
+                        <p className="text-sm font-medium text-gray-600">Loading...</p>
+                      </div>
                     )}
                   </div>
                 </div>

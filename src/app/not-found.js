@@ -45,7 +45,7 @@ export default function NotFound() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="cartoon-outline bg-yellow-500 text-white px-6 py-3 rounded-full flex items-center gap-2"
+                className="cartoon-outline bg-[#1c1c84] text-white px-6 py-3 rounded-full flex items-center gap-2"
                 onClick={() => router.push('/')}
               >
                 <FiHome size={20} />
