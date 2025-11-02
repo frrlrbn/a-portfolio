@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { FiDownload } from 'react-icons/fi';
 
@@ -98,27 +98,27 @@ export default function Certificates() {
   return (
     <section id="certificates" className="relative py-24 px-4 sm:px-6 lg:px-8">
       <div className="flex justify-center">
-            <motion.h2 
-              className="text-3xl sm:text-4xl font-bold text-black mb-4 relative inline-block text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className="relative z-10">Skills & Expertise</span>
-              <motion.span
-                className="absolute bottom-0 left-0 w-full h-3 bg-[#1c1c84]/20 -z-10"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.8,
-                  delay: 0.3,
-                  ease: [0.22, 1, 0.36, 1]
-                }}
-              />
-            </motion.h2>
-          </div>
+        <motion.h2
+          className="text-3xl sm:text-4xl font-bold text-black mb-4 relative inline-block text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="relative z-10">Certificates</span>
+          <motion.span
+            className="absolute bottom-0 left-0 w-full h-3 bg-[#1c1c84]/20 -z-10"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.8,
+              delay: 0.3,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
+        </motion.h2>
+      </div>
 
       <div
         ref={scrollContainerRef}
@@ -136,7 +136,8 @@ export default function Certificates() {
               />
             </div>
 
-            <div className="relative w-full max-w-4xl h-[72vh] sm:h-[65vh]">
+            {/* Clip any horizontal overflow inside this centered card area */}
+            <div className="relative w-full max-w-4xl h-[100vh] sm:h-[100vh] mx-auto overflow-hidden">
               {certificates.map((certificate, index) => (
                 <CertificateCard
                   key={certificate.title}
@@ -164,9 +165,19 @@ function CertificateCard({ certificate, index, total, progress }) {
     return 1 - clamped * 0.08;
   });
 
+  // Cap rotation and reduce it on small screens to avoid corners poking out and causing horizontal scroll
   const rotate = useTransform(progress, (value) => {
     const distance = index - value;
-    return `${distance * -1.5}deg`;
+    const base = distance * -1.5; // original behavior
+
+    // detect small screen and cap degrees
+    let maxDeg = 30;
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      maxDeg = 12; // much smaller rotation on mobile
+    }
+
+    const clamped = Math.max(Math.min(base, maxDeg), -maxDeg);
+    return `${clamped}deg`;
   });
 
   const handleDownload = () => {
@@ -182,8 +193,8 @@ function CertificateCard({ certificate, index, total, progress }) {
   return (
     <motion.article
       aria-label={`${certificate.title} certificate`}
-      style={{ y, scale, rotate, zIndex: total - index }}
-      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      style={{ y, scale, rotate, zIndex: total - index, transformOrigin: 'center center' }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none px-4"
     >
       <motion.div
         className="pointer-events-auto w-full max-w-3xl"
@@ -194,10 +205,12 @@ function CertificateCard({ certificate, index, total, progress }) {
         <div className="cartoon-outline bg-white/95 backdrop-blur-sm border-4 border-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl">
           <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center">
             <div className="w-full md:w-2/3 aspect-[4/3] bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center shadow-inner">
+              {/* ensure image cannot overflow by using max-w/max-h */}
               <img
                 src={certificate.image}
                 alt={certificate.title}
-                className="h-full w-full object-contain"
+                className="max-w-full max-h-full object-contain"
+                draggable={false}
               />
             </div>
 
