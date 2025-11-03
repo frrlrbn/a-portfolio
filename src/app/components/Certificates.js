@@ -1,326 +1,273 @@
-'use client';
+﻿'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiChevronLeft, FiChevronRight, FiDownload } from 'react-icons/fi';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { FiDownload } from 'react-icons/fi';
 
 const certificates = [
   {
-    title: 'Sertifikat Finalis ICT Business Development',
+    title: 'Finalis ICT Business Development',
     image: '/images/sertifikat-1.jpg',
     description: 'Certificate of Achievement',
     date: '2024',
   },
   {
-    title: 'Certificate 2',
+    title: 'Peserta Lomba Electrical Competition',
     image: '/images/sertifikat-2.png',
-    description: 'Certificate of Achievement',
-    date: '2023',
+    description: 'Certificate of Participation',
+    date: '2024',
   },
   {
-    title: 'Certificate 3',
-    image: '/images/sertifikat-3.jpg',
-    description: 'Certificate of Achievement',
-    date: '2023',
-  },
-  {
-    title: 'Certificate 4',
+    title: 'Peserta Seminar Literasi Digital SMK Negeri 2 Depok Sleman',
     image: '/images/sertifikat-4.jpg',
-    description: 'Certificate of Achievement',
-    date: '2023',
+    description: 'Certificate of Participation',
+    date: '2024',
   },
   {
-    title: 'Certificate 5',
+    title: 'Peserta Line Follower Competition',
     image: '/images/sertifikat-5.jpg',
-    description: 'Certificate of Achievement',
-    date: '2023',
+    description: 'Certificate of Participation',
+    date: '2024',
   },
   {
-    title: 'Certificate 6',
+    title: 'Peserta Kegiatan Pendidikan dan Pelatihan Peningkatan Kompetensi Peserta Didik SMK Dengan Keahlian Elektronika',
     image: '/images/sertifikat-6.jpg',
-    description: 'Certificate of Achievement',
-    date: '2023',
+    description: 'Certificate of Participation',
+    date: '2024',
   },
   {
-    title: 'Certificate 7',
+    title: 'Peserta Kampanye Sosial #ThinkThenDoIt Bijak Bermedia, Cerdas Berkarya',
     image: '/images/sertifikat-7.jpg',
-    description: 'Certificate of Achievement',
-    date: '2023',
+    description: 'Certificate of Participation',
+    date: '2022',
   },
   {
-    title: 'Certificate 8',
+    title: 'Peserta Terbaik Bhineka Competition',
     image: '/images/sertifikat-8.jpg',
     description: 'Certificate of Achievement',
-    date: '2023',
+    date: '2022',
   },
   {
-    title: 'Certificate 9',
+    title: '50 Terbaik AENS National Competition Vol.2',
     image: '/images/sertifikat-9.jpg',
     description: 'Certificate of Achievement',
-    date: '2023',
+    date: '2022',
   },
   {
-    title: 'Certificate 10',
+    title: 'Peserta Campaign "Self Injury Awareness Day"',
     image: '/images/sertifikat-10.jpg',
-    description: 'Certificate of Achievement',
+    description: 'Certificate of Participation',
     date: '2023',
   },
   {
-    title: 'Certificate 11',
+    title: 'Juara 3 Lomba Tilawah Festival Anak Sholeh Indonesia',
     image: '/images/sertifikat-11.jpg',
     description: 'Certificate of Achievement',
-    date: '2023',
+    date: '2019',
   },
 ];
 
 export default function Certificates() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const scrollContainerRef = useRef(null);
+  const trackRef = useRef(null);
+  const [sectionHeight, setSectionHeight] = useState(0);
+  const [scrollRange, setScrollRange] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  const { scrollYProgress } = useScroll({
+    target: scrollContainerRef,
+    offset: ['start start', 'end end'],
+    layoutEffect: false,
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
+  const progressWidth = useTransform(scrollYProgress, (value) => `${Math.min(Math.max(value, 0), 1) * 100}%`);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
+
+    const updateMetrics = () => {
+      if (!trackRef.current || !scrollContainerRef.current) return;
+
+      const viewportWidth = scrollContainerRef.current.offsetWidth;
+      const totalWidth = trackRef.current.scrollWidth;
+      const range = Math.max(totalWidth - viewportWidth, 0);
+      const baseHeight = window.innerHeight * (window.innerWidth < 768 ? 0.95 : 0.85);
+
+      setScrollRange(range);
+      setSectionHeight(range + baseHeight);
+    };
+
     checkMobile();
+    updateMetrics();
+
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener('resize', updateMetrics);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', updateMetrics);
+    };
   }, []);
 
-  const nextCertificate = () => {
-    setCurrentIndex((prev) => (prev + 1) % certificates.length);
-  };
+  useEffect(() => {
+    if (!isMobile) return;
 
-  const prevCertificate = () => {
-    setCurrentIndex((prev) => (prev - 1 + certificates.length) % certificates.length);
-  };
+    const updateMobileMetrics = () => {
+      if (!trackRef.current || !scrollContainerRef.current) return;
 
-  const mobileVariants = {
-    enter: {
-      scale: 0.8,
-      opacity: 0,
-      rotateY: 90,
-      transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1]
-      }
-    },
-    center: {
-      scale: 1,
-      opacity: 1,
-      rotateY: 0,
-      transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1]
-      }
-    },
-    exit: {
-      scale: 0.8,
-      opacity: 0,
-      rotateY: -90,
-      transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1]
-      }
-    }
-  };
+      const viewportWidth = scrollContainerRef.current.offsetWidth;
+      const totalWidth = trackRef.current.scrollWidth;
+      const range = Math.max(totalWidth - viewportWidth, 0);
+      const baseHeight = window.innerHeight * 0.95;
 
-  const desktopVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 50 : -50,
-      opacity: 0,
-      scale: 0.95
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 30
-      }
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? 50 : -50,
-      opacity: 0,
-      scale: 0.95,
-      transition: {
-        duration: 0.2
-      }
-    })
-  };
+      setScrollRange(range);
+      setSectionHeight(range + baseHeight);
+    };
 
-  const modalVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.8,
-      rotate: -5
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      rotate: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 25
-      }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      rotate: 5,
-      transition: {
-        duration: 0.2
-      }
-    }
-  };
+    updateMobileMetrics();
+    window.addEventListener('resize', updateMobileMetrics);
 
-  const handleDownload = (e) => {
-    e.stopPropagation();
+    return () => window.removeEventListener('resize', updateMobileMetrics);
+  }, [isMobile]);
+
+  return (
+    <section id="certificates" className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <div
+        ref={scrollContainerRef}
+        className="relative max-w-6xl mx-auto"
+        style={{ height: sectionHeight ? `${sectionHeight}px` : `${certificates.length * 60}vh` }}
+      >
+        <div className="sticky top-24 md:top-28 h-[calc(100vh-7rem)] md:h-[calc(100vh-8rem)]">
+          <div className="relative h-full cartoon-outline bg-white overflow-hidden">
+            <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10">
+              <motion.h2
+                className="text-4xl font-bold text-black relative inline-block text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <span className="relative z-10">Certificates</span>
+                <motion.span
+                  className="absolute bottom-1.5 left-0 w-full h-2 sm:h-3 bg-[#1c1c84]/20 -z-10"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.8,
+                    delay: 0.3,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                />
+              </motion.h2>
+            </div>
+
+            <div className={`absolute z-20 rounded-full overflow-hidden ${isMobile ? 'top-[72px] left-1/2 -translate-x-1/2 w-2/3 h-[6px] bg-slate-200/60' : 'hidden md:block top-28 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-slate-200/70'}`}>
+              <motion.span
+                style={{ width: progressWidth }}
+                className="h-full block bg-gradient-to-r from-[#1c1c84] to-[#2525a8]"
+              />
+            </div>
+
+            {isMobile && (
+              <motion.p
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="absolute top-[88px] left-1/2 -translate-x-1/2 text-xs text-slate-400 font-medium tracking-wide z-10"
+              >
+                Keep scrolling down :)
+              </motion.p>
+            )}
+
+            <motion.div
+              ref={trackRef}
+              className={`absolute left-0 flex items-stretch ${isMobile ? 'top-[calc(50%+30px)] -translate-y-1/2 gap-4 pl-[18vw] pr-[18vw]' : 'top-[calc(50%+25px)] -translate-y-1/2 gap-6 sm:gap-8 lg:gap-10 pl-[12vw] pr-[25vw]'}`}
+              style={{ 
+                x,
+                willChange: 'transform',
+              }}
+            >
+              {certificates.map((certificate, index) => (
+                <CertificateItem
+                  key={certificate.title}
+                  certificate={certificate}
+                  index={index}
+                  variant={isMobile ? 'mobile' : 'desktop'}
+                />
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CertificateItem({ certificate, index, variant = 'desktop' }) {
+  const isDesktop = variant === 'desktop';
+
+  const handleDownload = () => {
     const link = document.createElement('a');
-    link.href = certificates[currentIndex].image;
-    const fileExtension = certificates[currentIndex].image.split('.').pop().toLowerCase();
-    link.download = `azelin-certificate-${currentIndex + 1}.${fileExtension}`;
+    link.href = certificate.image;
+    const fileExtension = certificate.image.split('.').pop()?.toLowerCase() ?? 'jpg';
+    link.download = `certificate-${index + 1}.${fileExtension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   return (
-    <section id="certificates" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="space-y-12"
-        >
-          <div className="flex justify-center">
-            <motion.h2 
-              className="text-3xl sm:text-4xl font-bold text-black mb-4 relative inline-block text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className="relative z-10">Certificates</span>
-              <motion.span
-                className="absolute bottom-0 left-0 w-full h-3 bg-yellow-500/20 -z-10"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.8,
-                  delay: 0.3,
-                  ease: [0.22, 1, 0.36, 1]
-                }}
-              />
-            </motion.h2>
+    <motion.article
+      aria-label={`${certificate.title} certificate`}
+      whileTap={!isDesktop ? { scale: 0.98 } : undefined}
+      className={`cartoon-outline bg-white border-4 border-slate-900 rounded-3xl shadow-2xl p-4 sm:p-6 transition-transform duration-300 ${
+        isDesktop
+          ? 'min-w-[85vw] sm:min-w-[70vw] lg:min-w-[650px]'
+          : 'min-w-[85vw] sm:min-w-[70vw] snap-center'
+      }`}
+      style={{ willChange: 'transform' }}
+    >
+      <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+        <div className="relative w-full md:w-3/5 lg:w-2/3 aspect-[16/10] bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center shadow-inner">
+          <img
+            src={certificate.image}
+            alt={certificate.title}
+            className="h-full w-full object-contain"
+            draggable={false}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div className="w-full md:w-2/5 lg:w-1/3 flex flex-col justify-center space-y-3 sm:space-y-4">
+          <div className="space-y-2">
+            <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-wide text-[#1c1c84] uppercase">
+              <span className="h-2 w-2 rounded-full bg-[#1c1c84]" />
+              {certificate.date}
+            </span>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug break-words">
+              {certificate.title}
+            </h3>
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+              {certificate.description}
+            </p>
           </div>
 
-          <div className="relative">
-            <div className="aspect-video mx-auto max-w-2xl relative">
-              <AnimatePresence initial={false} mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  variants={isMobile ? mobileVariants : desktopVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 cartoon-outline bg-white p-4 cursor-pointer hover:scale-[1.02] transition-transform duration-300"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <motion.img 
-                    src={certificates[currentIndex].image} 
-                    alt={certificates[currentIndex].title}
-                    className="w-full h-full object-contain rounded-lg"
-                    initial={{ scale: 0.95 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <motion.button
-              onClick={prevCertificate}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white cartoon-outline shadow-lg"
-            >
-              <FiChevronLeft size={24} />
-            </motion.button>
-            <motion.button
-              onClick={nextCertificate}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white cartoon-outline shadow-lg"
-            >
-              <FiChevronRight size={24} />
-            </motion.button>
-          </div>
-
-          <AnimatePresence>
-            {isModalOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-                onClick={() => setIsModalOpen(false)}
-              >
-                <motion.div
-                  variants={modalVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="cartoon-outline bg-white p-4 sm:p-6 max-w-2xl w-full mx-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="flex justify-end mb-2">
-                    <motion.button
-                      onClick={() => setIsModalOpen(false)}
-                      whileHover={{ rotate: 90 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                      <FiX size={24} />
-                    </motion.button>
-                  </div>
-                  <motion.img 
-                    src={certificates[currentIndex].image} 
-                    alt={certificates[currentIndex].title}
-                    className="w-full h-auto max-h-[70vh] sm:max-h-[80vh] object-contain rounded-lg cartoon-outline"
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.3 }}
-                  />
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="flex justify-center mt-4"
-                  >
-                    <motion.button
-                      onClick={handleDownload}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-yellow-600 transition-colors cartoon-outline"
-                    >
-                      <FiDownload size={20} />
-                      <span>Download Certificate</span>
-                    </motion.button>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+          <motion.button
+            onClick={handleDownload}
+            whileHover={{ scale: 1.03, translateY: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="cartoon-outline flex items-center justify-center gap-2 rounded-xl bg-[#1c1c84] text-white px-4 py-2.5 font-semibold shadow-lg hover:bg-[#151560] transition-colors text-xs sm:text-sm w-full"
+          >
+            <FiDownload size={16} />
+            <span>Download</span>
+          </motion.button>
+        </div>
       </div>
-    </section>
+    </motion.article>
   );
-} 
+}

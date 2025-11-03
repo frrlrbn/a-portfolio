@@ -12,6 +12,7 @@ import Projects from './components/Projects';
 import Certificates from './components/Certificates';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import StructuredData from './components/StructuredData';
 
 export default function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -81,6 +82,7 @@ export default function Portfolio() {
 
   return (
     <main className="min-h-screen">
+      <StructuredData />
       <Navbar />
       <div id="home">
         <Home currentTime={currentTime} weather={weather} weatherError={weatherError} />

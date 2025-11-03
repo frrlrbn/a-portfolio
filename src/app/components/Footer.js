@@ -24,8 +24,7 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500" />
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#1c1c84] via-[#2525a8] to-[#1c1c84]" />
 
       <div className="max-w-7xl mx-auto relative">
         <motion.div
@@ -41,7 +40,7 @@ export default function Footer() {
               whileHover={{ scale: 1.05 }}
               className="inline-block"
             >
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">
+              <h3 className="text-3xl font-bold bg-white bg-clip-text text-transparent">
                 Azelin Azzahra
               </h3>
             </motion.div>
@@ -57,7 +56,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.2, y: -5 }}
                   whileTap={{ scale: 0.9 }}
-                  className="text-gray-400 hover:text-yellow-500 transition-colors duration-300 text-xl"
+                  className="text-gray-400 hover:text-white transition-colors duration-300 text-xl"
                 >
                   <span className="sr-only">{link.label}</span>
                   {link.icon}
@@ -68,7 +67,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Quick Links</h4>
+            <h4 className="text-xl font-semibold mb-6 text-white">Quick Links</h4>
             <ul className="space-y-4">
               {['Home', 'About', 'Projects', 'Contact'].map((link) => (
                 <motion.li
@@ -78,9 +77,9 @@ export default function Footer() {
                 >
                   <a
                     href={`#${link.toLowerCase()}`}
-                    className="text-gray-400 group-hover:text-yellow-500 transition-colors duration-300 flex items-center"
+                    className="text-gray-400 group-hover:text-white transition-colors duration-300 flex items-center"
                   >
-                    <span className="w-2 h-2 bg-yellow-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="w-2 h-2 bg-white rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     {link}
                   </a>
                 </motion.li>
@@ -90,7 +89,7 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Get in Touch</h4>
+            <h4 className="text-xl font-semibold mb-6 text-white">Get in Touch</h4>
             <div className="space-y-4">
               <p className="text-gray-400">
                 Interested in working together? Let's connect!
@@ -98,7 +97,7 @@ export default function Footer() {
               <motion.a
                 href="mailto:azelinazzahra@gmail.com"
                 whileHover={{ scale: 1.05 }}
-                className="inline-block cartoon-outline bg-yellow-500 hover:bg-yellow-600 px-6 py-3 rounded-full text-black font-medium transition-colors duration-300"
+                className="inline-block cartoon-outline bg-[#1c1c84] hover:bg-[#151560] px-6 py-3 rounded-full text-white font-medium transition-colors duration-300"
               >
                 Contact Me
               </motion.a>
@@ -111,7 +110,7 @@ export default function Footer() {
           onClick={scrollToTop}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="cartoon-outline fixed bottom-6 right-6 bg-yellow-500 text-black p-3 rounded-full shadow-lg hover:bg-yellow-400 transition-colors duration-300 z-[999]"
+          className="cartoon-outline fixed bottom-6 right-6 bg-[#1c1c84] text-white p-3 rounded-full shadow-lg hover:bg-[#151560] transition-colors duration-300 z-[999]"
         >
           <FiArrowUp className="text-xl" />
         </motion.button>
@@ -128,7 +127,7 @@ export default function Footer() {
             {/* Credits */}
             <div className="text-center md:text-right">
               <p className="text-gray-400">
-              This website was developed through collaboration between <a href="https://frl.blue" target="_blank" rel="noopener noreferrer" className="text-yellow-500 hover:underline">frrlrbn</a> and <a href="/" className="text-yellow-500 hover:underline">azelin</a>
+              This website was developed through collaboration between <a href="https://farrel.id" target="_blank" rel="noopener noreferrer" className="text-[#8787f8] hover:underline">frrlrbn</a> and <a href="/" className="text-[#8787f8] hover:underline">azelin</a>
               </p>
               <br></br>
             </div>

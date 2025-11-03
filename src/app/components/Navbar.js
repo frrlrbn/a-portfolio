@@ -164,8 +164,8 @@ export default function Navbar() {
                       onMouseEnter={() => setHoveredItem(item.href)}
                       onMouseLeave={() => setHoveredItem(null)}
                     >
-                      <div className={`cartoon-outline bg-white p-3 rounded-full transition-all duration-300 ${
-                        isActive ? 'bg-yellow-500 text-white' : 'hover:bg-yellow-500 hover:text-white'
+                      <div className={`cartoon-outline p-3 rounded-full transition-all duration-300 ${
+                        isActive ? 'bg-[#1c1c84] text-white' : 'bg-white hover:bg-[#1c1c84] hover:text-white'
                       }`}>
                         <div className="flex items-center">
                           <span className="text-xl">{item.icon}</span>
@@ -246,7 +246,7 @@ export default function Navbar() {
                     href="/"
                     onClick={(e) => handleNavigation(item.href, e)}
                     className={`cartoon-outline block px-3 py-3 rounded-md text-base font-medium ${
-                      isActive ? 'bg-yellow-500 text-white' : 'text-gray-700 hover:bg-yellow-500 hover:text-white'
+                      isActive ? 'bg-[#1c1c84] text-white' : 'text-gray-700 hover:bg-[#1c1c84] hover:text-white'
                     }`}
                     variants={menuItemVariants}
                     whileHover={{ 

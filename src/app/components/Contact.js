@@ -92,7 +92,7 @@ ${formData.message}
             >
               Get in Touch
               <motion.span
-                className="absolute bottom-0 left-0 w-full h-1 bg-yellow-500"
+                className="absolute bottom-0 left-0 w-full h-1 bg-[#1c1c84]"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
@@ -110,7 +110,7 @@ ${formData.message}
             <motion.div className="space-y-4" variants={itemVariants}>
               <motion.div className="flex items-center space-x-4" variants={itemVariants}>
                 <div className="cartoon-outline bg-white p-4 rounded-full">
-                  <FiMail className="text-yellow-500" size={24} />
+                  <FiMail className="text-[#1c1c84]" size={24} />
                 </div>
                 <div>
                   <h3 className="font-semibold">Email</h3>
@@ -120,7 +120,7 @@ ${formData.message}
 
               <motion.div className="flex items-center space-x-4" variants={itemVariants}>
                 <div className="cartoon-outline bg-white p-4 rounded-full">
-                  <FiMapPin className="text-yellow-500" size={24} />
+                  <FiMapPin className="text-[#1c1c84]" size={24} />
                 </div>
                 <div>
                   <h3 className="font-semibold">Location</h3>
@@ -146,7 +146,7 @@ ${formData.message}
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="cartoon-outline w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                className="cartoon-outline w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#1c1c84] focus:border-transparent"
                 required
               />
             </motion.div>
@@ -161,7 +161,7 @@ ${formData.message}
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="cartoon-outline w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                className="cartoon-outline w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#1c1c84] focus:border-transparent"
                 required
               />
             </motion.div>
@@ -176,7 +176,7 @@ ${formData.message}
                 value={formData.message}
                 onChange={handleChange}
                 rows={4}
-                className="cartoon-outline w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                className="cartoon-outline w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#1c1c84] focus:border-transparent"
                 required
               />
             </motion.div>
@@ -185,7 +185,7 @@ ${formData.message}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
-              className="cartoon-outline w-full bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors duration-300"
+              className="cartoon-outline w-full bg-[#1c1c84] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#151560] transition-colors duration-300"
               variants={itemVariants}
             >
               Send Message

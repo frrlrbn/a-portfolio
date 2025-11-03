@@ -52,7 +52,7 @@ export default function Preloader() {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-yellow-500 rounded-full"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1c1c84] rounded-full"
               />
               <motion.div
                 animate={{
@@ -65,7 +65,7 @@ export default function Preloader() {
                   ease: "easeInOut",
                   delay: 0.5
                 }}
-                className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-yellow-500 rounded-full"
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1c1c84] rounded-full"
               />
               <motion.div
                 animate={{
@@ -78,7 +78,7 @@ export default function Preloader() {
                   ease: "easeInOut",
                   delay: 1
                 }}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-yellow-500 rounded-full"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1c1c84] rounded-full"
               />
               <motion.div
                 animate={{
@@ -91,7 +91,7 @@ export default function Preloader() {
                   ease: "easeInOut",
                   delay: 1.5
                 }}
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-yellow-500 rounded-full"
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1c1c84] rounded-full"
               />
             </motion.div>
           </motion.div>
@@ -120,7 +120,7 @@ export default function Preloader() {
             }}
             className="absolute top-0 left-1/2 -translate-x-1/2"
           >
-            <FiCode className="text-yellow-500 text-2xl" />
+            <FiCode className="text-[#1c1c84] text-2xl" />
           </motion.div>
           
           <motion.div
@@ -137,7 +137,7 @@ export default function Preloader() {
             }}
             className="absolute right-0 top-1/2 -translate-y-1/2"
           >
-            <FiLayers className="text-yellow-500 text-2xl" />
+            <FiLayers className="text-[#1c1c84] text-2xl" />
           </motion.div>
           
           <motion.div
@@ -154,7 +154,7 @@ export default function Preloader() {
             }}
             className="absolute bottom-0 left-1/2 -translate-x-1/2"
           >
-            <FiCpu className="text-yellow-500 text-2xl" />
+            <FiCpu className="text-[#1c1c84] text-2xl" />
           </motion.div>
           
           <motion.div
@@ -171,7 +171,7 @@ export default function Preloader() {
             }}
             className="absolute left-0 top-1/2 -translate-y-1/2"
           >
-            <FiLoader className="text-yellow-500 text-2xl" />
+            <FiLoader className="text-[#1c1c84] text-2xl" />
           </motion.div>
         </motion.div>
 
@@ -188,8 +188,8 @@ export default function Preloader() {
           }}
           className="absolute inset-0"
         >
-          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-yellow-400/30" />
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-yellow-400/30" />
+          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-[#1c1c84]/30" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-[#1c1c84]/30" />
         </motion.div>
       </div>
     </motion.div>
