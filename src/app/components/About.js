@@ -45,6 +45,7 @@ export default function About() {
   
   const [lastY, setLastY] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [gyroPermission, setGyroPermission] = useState('pending');
 
   useEffect(() => {
     // Detect mobile device
@@ -57,6 +58,62 @@ export default function About() {
     
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+  // Gyroscope handler for mobile devices
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleOrientation = (event) => {
+      if (event.beta !== null && event.gamma !== null) {
+        // beta: front-to-back tilt (range: -180 to 180)
+        // gamma: left-to-right tilt (range: -90 to 90)
+        
+        // Normalize and limit the rotation values
+        const beta = Math.max(-45, Math.min(45, event.beta || 0));
+        const gamma = Math.max(-45, Math.min(45, event.gamma || 0));
+        
+        // Apply rotation with increased sensitivity for left-right, minimal for up-down
+        const rotationX = (beta / 45) * -3; // Minimal vertical rotation (reduced from -15)
+        const rotationY = (gamma / 45) * 25; // Increased horizontal sensitivity (from 15)
+        
+        rotateX.set(rotationX);
+        rotateY.set(rotationY);
+        
+        // Apply parallax effect to foreground with higher sensitivity
+        const parallaxX = (gamma / 45) * 15; // Increased parallax (from 8)
+        const parallaxY = (beta / 45) * 5; // Minimal vertical parallax (from 8)
+        
+        foregroundX.set(parallaxX);
+        foregroundY.set(parallaxY);
+      }
+    };
+
+    const requestPermission = async () => {
+      if (typeof DeviceOrientationEvent !== 'undefined' && 
+          typeof DeviceOrientationEvent.requestPermission === 'function') {
+        try {
+          const permission = await DeviceOrientationEvent.requestPermission();
+          setGyroPermission(permission);
+          
+          if (permission === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation, true);
+          }
+        } catch (error) {
+          console.error('Error requesting gyroscope permission:', error);
+          setGyroPermission('denied');
+        }
+      } else {
+        // For Android and other devices that don't require permission
+        setGyroPermission('granted');
+        window.addEventListener('deviceorientation', handleOrientation, true);
+      }
+    };
+
+    requestPermission();
+
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation, true);
+    };
+  }, [isMobile, rotateX, rotateY, foregroundX, foregroundY]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -79,7 +136,7 @@ export default function About() {
 
   // 3D Parallax Handlers - optimized for speed and accuracy
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || isMobile) return; // Disable mouse move on mobile
 
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -88,16 +145,16 @@ export default function About() {
     const offsetX = e.clientX - centerX;
     const offsetY = e.clientY - centerY;
 
-    // Different rotation ranges for mobile vs desktop
-    const rotationMultiplier = isMobile ? 5 : 8;
+    // Rotation for desktop
+    const rotationMultiplier = 8;
     const rotationX = (offsetY / (rect.height / 2)) * -rotationMultiplier;
     const rotationY = (offsetX / (rect.width / 2)) * rotationMultiplier;
 
     rotateX.set(rotationX);
     rotateY.set(rotationY);
 
-    // Different parallax movement for mobile vs desktop
-    const parallaxMultiplier = isMobile ? 4 : 10;
+    // Parallax movement for desktop
+    const parallaxMultiplier = 10;
     const parallaxX = (offsetX / rect.width) * parallaxMultiplier;
     const parallaxY = (offsetY / rect.height) * parallaxMultiplier;
     
@@ -111,17 +168,33 @@ export default function About() {
   };
 
   const handleMouseEnter = () => {
-    scale.set(1.05);
+    if (!isMobile) {
+      scale.set(1.05);
+    }
   };
 
   const handleMouseLeave = () => {
-    scale.set(1);
-    rotateX.set(0);
-    rotateY.set(0);
-    foregroundX.set(0);
-    foregroundY.set(0);
+    if (!isMobile) {
+      scale.set(1);
+      rotateX.set(0);
+      rotateY.set(0);
+      foregroundX.set(0);
+      foregroundY.set(0);
+    }
   };
 
+  const handleGyroPermission = async () => {
+    if (typeof DeviceOrientationEvent !== 'undefined' && 
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        const permission = await DeviceOrientationEvent.requestPermission();
+        setGyroPermission(permission);
+      } catch (error) {
+        console.error('Error requesting gyroscope permission:', error);
+        setGyroPermission('denied');
+      }
+    }
+  };
   return (
     <section id="about" className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
@@ -133,53 +206,67 @@ export default function About() {
           className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
         >
           {/* Left Column - Profile Image with 3D Parallax */}
-          <div 
-            ref={cardRef}
-            className="w-full max-w-[300px] h-[300px] sm:max-w-[350px] sm:h-[350px] md:max-w-[400px] md:h-[400px] lg:max-w-[500px] lg:h-[500px] mx-auto cursor-pointer"
-            style={{ perspective: '1200px' }}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <motion.div
-              className="cartoon-outline bg-white p-4 w-full h-full rounded-lg relative"
-              style={{
-                rotateX,
-                rotateY,
-                scale,
-                transformStyle: 'preserve-3d'
-              }}
+          <div className="relative w-full max-w-[300px] h-[300px] sm:max-w-[350px] sm:h-[350px] md:max-w-[400px] md:h-[400px] lg:max-w-[500px] lg:h-[500px] mx-auto">
+            {/* Gyroscope Permission Button for iOS */}
+            {isMobile && gyroPermission === 'pending' && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={handleGyroPermission}
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-[#1c1c84] text-white px-6 py-3 rounded-lg shadow-lg cartoon-outline hover:bg-[#151560] transition-colors duration-300"
+              >
+                Enable Gyroscope
+              </motion.button>
+            )}
+            
+            <div 
+              ref={cardRef}
+              className="w-full h-full cursor-pointer"
+              style={{ perspective: '1200px' }}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
-              <div className="w-full h-full rounded-lg overflow-hidden relative select-none">
-                {/* Background Layer */}
-                <motion.img 
-                  src="/images/profile-background.jpeg"
-                  alt="Profile Background" 
-                  className="absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none"
-                  draggable="false"
-                  style={{
-                    transform: 'translateZ(0px)',
-                    userSelect: 'none'
-                  }}
-                />
-                
-                {/* Foreground Layer with Enhanced Parallax */}
-                <motion.img 
-                  src="/images/profile-foreground.png"
-                  alt="Profile Foreground" 
-                  className="absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none"
-                  draggable="false"
-                  style={{
-                    x: foregroundX,
-                    y: foregroundY,
-                    transform: isMobile ? 'translateZ(30px)' : 'translateZ(40px)',
-                    transformStyle: 'preserve-3d',
-                    willChange: 'transform',
-                    userSelect: 'none'
-                  }}
-                />
-              </div>
-            </motion.div>
+              <motion.div
+                className="cartoon-outline bg-white p-4 w-full h-full rounded-lg relative"
+                style={{
+                  rotateX,
+                  rotateY,
+                  scale,
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                <div className="w-full h-full rounded-lg overflow-hidden relative select-none">
+                  {/* Background Layer */}
+                  <motion.img 
+                    src="/images/profile-background.jpeg"
+                    alt="Profile Background" 
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none"
+                    draggable="false"
+                    style={{
+                      transform: 'translateZ(0px)',
+                      userSelect: 'none'
+                    }}
+                  />
+                  
+                  {/* Foreground Layer with Enhanced Parallax */}
+                  <motion.img 
+                    src="/images/profile-foreground.png"
+                    alt="Profile Foreground" 
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none"
+                    draggable="false"
+                    style={{
+                      x: foregroundX,
+                      y: foregroundY,
+                      transform: isMobile ? 'translateZ(30px)' : 'translateZ(40px)',
+                      transformStyle: 'preserve-3d',
+                      willChange: 'transform',
+                      userSelect: 'none'
+                    }}
+                  />
+                </div>
+              </motion.div>
+            </div>
           </div>
 
           {/* Right Column - Content */}
@@ -284,4 +371,4 @@ export default function About() {
       </div>
     </section>
   );
-} 
+}

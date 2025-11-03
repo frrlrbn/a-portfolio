@@ -1,0 +1,62 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Azelin Azzahra",
+  "jobTitle": "Industrial Automation Engineering Student",
+  "description": "Industrial Automation Engineering student at SMK Negeri 2 Depok Sleman, specializing in robotics, PLC programming, AutoCAD design, and creative innovation.",
+  "url": "https://azelin-azzahra.vercel.app",
+  "image": "https://azelin-azzahra.vercel.app/images/profile-foreground.png",
+  "sameAs": [
+    "https://instagram.com/azelyneazara",
+    "https://instagram.com/designsocietyy",
+    "https://www.linkedin.com/in/azelin-azzahra-6bba45333/",
+    "https://www.tiktok.com/@azelyneazz",
+    "https://www.tiktok.com/@designsocietyy"
+  ],
+  "alumniOf": {
+    "@type": "EducationalOrganization",
+    "name": "SMK Negeri 2 Depok Sleman",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Depok",
+      "addressRegion": "Sleman",
+      "addressCountry": "ID"
+    }
+  },
+  "knowsAbout": [
+    "Industrial Automation",
+    "Robotics",
+    "PLC Programming",
+    "AutoCAD Design",
+    "Microcontroller Programming",
+    "C++ Programming",
+    "Arduino",
+    "Pneumatic Systems",
+    "Graphic Design",
+    "Content Creation",
+    "Electronics Engineering"
+  ],
+  "hasOccupation": {
+    "@type": "Occupation",
+    "name": "Industrial Automation Engineering Student",
+    "occupationLocation": {
+      "@type": "City",
+      "name": "Sleman"
+    },
+    "skills": [
+      "PLC Programming",
+      "AutoCAD",
+      "Robotics",
+      "C++ Programming",
+      "Arduino",
+      "Graphic Design",
+      "Content Writing"
+    ]
+  },
+  "award": [
+    "Finalis ICT Business Development 2024",
+    "Peserta Terbaik Bhineka Competition 2022",
+    "50 Terbaik AENS National Competition Vol.2 2022",
+    "Juara 3 Lomba Tilawah Festival Anak Sholeh Indonesia 2019"
+  ]
+}

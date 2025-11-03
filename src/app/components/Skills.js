@@ -265,12 +265,12 @@ export default function Skills() {
                         dragElastic={0.2}
                         onDragStart={handleDragStart}
                         onDragEnd={handleDragEnd}
-                        className="absolute inset-0 cursor-grab active:cursor-grabbing px-1 pb-1"
+                        className="absolute inset-0 px-1 pb-1"
                         style={{ touchAction: 'pan-y' }}
                       >
-                        <div className="w-full h-full">
+                        <div className="w-full h-full cursor-grab active:cursor-grabbing">
                           <motion.div
-                            className="cartoon-outline bg-gradient-to-br from-white to-gray-50 p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg h-full flex flex-col"
+                            className="cartoon-outline bg-gradient-to-br from-white to-gray-50 p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg h-full flex flex-col pointer-events-none"
                           >
                             {/* Icon and Title */}
                             <div className="flex items-start gap-2.5 sm:gap-4 mb-2 sm:mb-4">
@@ -302,7 +302,7 @@ export default function Skills() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.3 }}
-                              className="text-gray-700 leading-relaxed text-base sm:text-base md:text-lg overflow-y-auto flex-1"
+                              className="text-gray-700 leading-relaxed text-base sm:text-base md:text-lg overflow-y-auto flex-1 pointer-events-auto touch-pan-y"
                             >
                               {skill.description}
                             </motion.p>
