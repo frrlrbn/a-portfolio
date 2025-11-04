@@ -24,13 +24,13 @@ body {
 /* Custom text selection styling */
 ::selection {
   background-color: var(--primary);
-  color: var(--secondary);
+  color: #ffffff;
   text-shadow: none;
 }
 
 ::-moz-selection {
   background-color: var(--primary);
-  color: var(--secondary);
+  color: #ffffff;
   text-shadow: none;
 }
 
@@ -142,11 +142,6 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.widget:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .widget.col-span-2 {

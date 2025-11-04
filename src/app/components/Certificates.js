@@ -7,63 +7,57 @@ import { FiDownload } from 'react-icons/fi';
 const certificates = [
   {
     title: 'Finalis ICT Business Development',
-    image: '/images/sertifikat-1.jpg',
+    image: '/images/certificates/sertifikat-1.webp',
     description: 'Certificate of Achievement',
     date: '2024',
   },
   {
     title: 'Peserta Lomba Electrical Competition',
-    image: '/images/sertifikat-2.png',
+    image: '/images/certificates/sertifikat-2.webp',
     description: 'Certificate of Participation',
     date: '2024',
   },
   {
     title: 'Peserta Seminar Literasi Digital SMK Negeri 2 Depok Sleman',
-    image: '/images/sertifikat-4.jpg',
+    image: '/images/certificates/sertifikat-4.webp',
     description: 'Certificate of Participation',
     date: '2024',
   },
   {
     title: 'Peserta Line Follower Competition',
-    image: '/images/sertifikat-5.jpg',
+    image: '/images/certificates/sertifikat-5.webp',
     description: 'Certificate of Participation',
     date: '2024',
   },
   {
     title: 'Peserta Kegiatan Pendidikan dan Pelatihan Peningkatan Kompetensi Peserta Didik SMK Dengan Keahlian Elektronika',
-    image: '/images/sertifikat-6.jpg',
+    image: '/images/certificates/sertifikat-6.webp',
     description: 'Certificate of Participation',
     date: '2024',
   },
   {
     title: 'Peserta Kampanye Sosial #ThinkThenDoIt Bijak Bermedia, Cerdas Berkarya',
-    image: '/images/sertifikat-7.jpg',
+    image: '/images/certificates/sertifikat-7.webp',
     description: 'Certificate of Participation',
     date: '2022',
   },
   {
     title: 'Peserta Terbaik Bhineka Competition',
-    image: '/images/sertifikat-8.jpg',
+    image: '/images/certificates/sertifikat-8.webp',
     description: 'Certificate of Achievement',
     date: '2022',
   },
   {
     title: '50 Terbaik AENS National Competition Vol.2',
-    image: '/images/sertifikat-9.jpg',
+    image: '/images/certificates/sertifikat-9.webp',
     description: 'Certificate of Achievement',
     date: '2022',
   },
   {
     title: 'Peserta Campaign "Self Injury Awareness Day"',
-    image: '/images/sertifikat-10.jpg',
+    image: '/images/certificates/sertifikat-10.webp',
     description: 'Certificate of Participation',
     date: '2023',
-  },
-  {
-    title: 'Juara 3 Lomba Tilawah Festival Anak Sholeh Indonesia',
-    image: '/images/sertifikat-11.jpg',
-    description: 'Certificate of Achievement',
-    date: '2019',
   },
 ];
 

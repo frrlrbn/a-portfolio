@@ -97,12 +97,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1c1c84" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Azelin Portfolio" />
-        <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={`${rubik.variable} font-sans`}>
         <Providers>{children}</Providers>

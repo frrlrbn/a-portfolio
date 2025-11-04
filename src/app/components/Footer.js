@@ -1,8 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FiInstagram, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
 import { FaTiktok } from "react-icons/fa";
+import { useState, useEffect } from 'react';
 
 const socialLinks = [
   { icon: <FiInstagram />, url: 'https://instagram.com/azelyneazara', label: 'Instagram' },
@@ -14,6 +15,25 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button when scrolled down more than 300px from top
+      // This typically means user has scrolled past the home section
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      
+      // Show button only after scrolling past the first viewport (home section)
+      setShowBackToTop(scrollPosition > windowHeight * 0.5);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial position
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -105,15 +125,42 @@ export default function Footer() {
           </div>
         </motion.div>
 
-        {/* Back to Top Button */}
-        <motion.button
-          onClick={scrollToTop}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="cartoon-outline fixed bottom-6 right-6 bg-[#1c1c84] text-white p-3 rounded-full shadow-lg hover:bg-[#151560] transition-colors duration-300 z-[999]"
-        >
-          <FiArrowUp className="text-xl" />
-        </motion.button>
+        {/* Back to Top Button with Animation */}
+        <AnimatePresence>
+          {showBackToTop && (
+            <motion.button
+              onClick={scrollToTop}
+              initial={{ 
+                opacity: 0, 
+                scale: 0,
+                y: 20,
+              }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                y: 0,
+              }}
+              exit={{ 
+                opacity: 0, 
+                scale: 0,
+                y: 20,
+              }}
+              transition={{
+                duration: 0.3,
+                ease: [0.4, 0, 0.2, 1],
+              }}
+              whileHover={{ 
+                scale: 1.1,
+                transition: { duration: 0.4 }
+              }}
+              whileTap={{ scale: 0.9 }}
+              className="cartoon-outline fixed bottom-6 right-6 bg-[#1c1c84] text-white p-3 rounded-full shadow-lg hover:bg-[#151560] transition-colors duration-300 z-[999]"
+              aria-label="Back to top"
+            >
+              <FiArrowUp className="text-xl" />
+            </motion.button>
+          )}
+        </AnimatePresence>
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

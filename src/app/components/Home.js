@@ -179,7 +179,7 @@ export default function Home({ currentTime, weather, weatherError }) {
               <div className="widget-content">
                 <div className="w-full h-full rounded-full overflow-hidden">
                   <img 
-                    src="/images/widget1.png" 
+                    src="/images/widgets/widget1.webp" 
                     alt="Widget 1" 
                     className="w-full h-full object-cover"
                   />
@@ -193,7 +193,7 @@ export default function Home({ currentTime, weather, weatherError }) {
               <div className="widget-content">
                 <div className="w-full h-full rounded-lg overflow-hidden">
                   <img 
-                    src="/images/widget2.jpg" 
+                    src="/images/widgets/widget2.webp" 
                     alt="Widget 2" 
                     className="w-full h-full object-cover"
                   />
@@ -207,7 +207,7 @@ export default function Home({ currentTime, weather, weatherError }) {
               <div className="widget-content">
                 <div className="w-full h-full rounded-lg overflow-hidden">
                   <img 
-                    src="/images/widget3.jpg" 
+                    src="/images/widgets/widget3.webp" 
                     alt="Widget 3" 
                     className="w-full h-full object-cover"
                   />
@@ -221,7 +221,7 @@ export default function Home({ currentTime, weather, weatherError }) {
               <div className="widget-content">
                 <div className="w-full h-full rounded-full overflow-hidden">
                   <img 
-                    src="/images/widget4.png" 
+                    src="/images/widgets/widget4.webp" 
                     alt="Widget 4" 
                     className="w-full h-full object-cover"
                   />

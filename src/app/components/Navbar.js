@@ -124,7 +124,7 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed w-full z-40 transition-all duration-300 ${
-        scrolled ? 'bg-white/90 backdrop-blur-md shadow-lg' : 'bg-transparent'
+        scrolled ? 'bg-white shadow-lg border-b-4 border-black' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -235,7 +235,7 @@ export default function Navbar() {
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
-            className="md:hidden bg-white/90 backdrop-blur-md"
+            className="md:hidden bg-white shadow-lg border-b-4 border-black"
           >
             <div className="px-2 pt-2 pb-3 space-y-4 cartoon-outline">
               {navItems.map((item) => {
