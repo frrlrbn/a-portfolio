@@ -4,17 +4,15 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/private/'],
+        disallow: ['/api/', '/private/', '/login', '/blog/create', '/blog/edit/', '/blog/drafts', '/blog/profile'],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        crawlDelay: 0,
       },
       {
         userAgent: 'Bingbot',
         allow: '/',
-        crawlDelay: 1,
       },
     ],
     sitemap: 'https://azelin.my.id/sitemap.xml',

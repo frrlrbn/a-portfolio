@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX, FiHome, FiUser, FiCode, FiBriefcase, FiAward, FiMail } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiUser, FiCode, FiBriefcase, FiAward, FiMail, FiBookOpen } from 'react-icons/fi';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -188,6 +188,24 @@ export default function Navbar() {
                   </motion.div>
                 );
               })}
+
+              {/* Blog Link */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navItems.length * 0.1 }}
+              >
+                <Link
+                  href="/blog"
+                  className="relative group"
+                >
+                  <div className="cartoon-outline p-3 rounded-full transition-all duration-300 bg-white hover:bg-[#1c1c84] hover:text-white">
+                    <div className="flex items-center">
+                      <span className="text-xl"><FiBookOpen /></span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             </div>
           </div>
 
@@ -238,6 +256,19 @@ export default function Navbar() {
             className="md:hidden bg-white shadow-lg border-b-4 border-black"
           >
             <div className="px-2 pt-2 pb-3 space-y-4 cartoon-outline">
+              {/* Blog Link - Mobile */}
+              <motion.div variants={menuItemVariants}>
+                <Link
+                  href="/blog"
+                  onClick={() => setIsOpen(false)}
+                  className="cartoon-outline block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-[#1c1c84] hover:text-white"
+                >
+                  <div className="flex items-center">
+                    <span className="mr-3"><FiBookOpen /></span>
+                    <span>Blog</span>
+                  </div>
+                </Link>
+              </motion.div>
               {navItems.map((item) => {
                 const isActive = activeSection === item.href;
                 return (
