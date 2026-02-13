@@ -23,10 +23,14 @@ export async function GET(request, { params }) {
       );
     }
     
-    // If not published or archived, only allow the author to see it
+    // Draft and archived posts can only be accessed by the author
     if (!post.published || post.archived) {
       const session = await getSession();
-      if (!session || session.userId !== post.author._id.toString()) {
+      const isAuthor = session && session.userId === post.author._id.toString();
+      
+      // Drafts: only author can access (for editing)
+      // Archived: only author can view
+      if (!isAuthor) {
         return NextResponse.json(
           { error: 'Post not found' },
           { status: 404 }

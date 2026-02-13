@@ -6,7 +6,7 @@ import { FaTiktok } from "react-icons/fa";
 import { useState, useEffect } from 'react';
 
 const socialLinks = [
-  { icon: <FiInstagram />, url: 'https://instagram.com/azelyneazara', label: 'Instagram' },
+  { icon: <FiInstagram />, url: 'https://instagram.com/azelyneazr', label: 'Instagram' },
   { icon: <FiInstagram />, url: 'https://instagram.com/designsocietyy', label: 'Instagrams' },
   { icon: <FaTiktok />, url: 'https://www.tiktok.com/@azelyneazz', label: 'Tiktok' },
   { icon: <FaTiktok />, url: 'https://www.tiktok.com/@designsocietyy', label: 'Tiktoks' },

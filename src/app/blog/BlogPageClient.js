@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BlogNavbar from './components/BlogNavbar';
 import BlogCard from './components/BlogCard';
-import { FiSearch, FiX, FiChevronLeft, FiChevronRight, FiBookOpen, FiFeather } from 'react-icons/fi';
+import { FiSearch, FiX, FiChevronLeft, FiChevronRight, FiBookOpen, FiFeather, FiInstagram, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FaTiktok } from 'react-icons/fa';
 
 const WELCOME_WORDS = [
   'Welcome', 'Selamat Datang', 'いらっしゃいませ', '환영합니다', '欢迎光临',
@@ -15,6 +16,27 @@ const WELCOME_WORDS = [
 ];
 
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%!&*?+=<>';
+
+const socialLinks = [
+  { 
+    icon: <FiInstagram className="w-5 h-5" />, 
+    label: 'Instagram',
+    accounts: [
+      { url: 'https://instagram.com/azelyneazr', label: '@azelyneazr' },
+      { url: 'https://instagram.com/designsocietyy', label: '@designsocietyy' }
+    ]
+  },
+  { icon: <FiLinkedin className="w-5 h-5" />, url: 'https://www.linkedin.com/in/azelin-azzahra-6bba45333/', label: 'LinkedIn' },
+  { icon: <FiMail className="w-5 h-5" />, url: 'mailto:azelinazzahra@gmail.com', label: 'Email' },
+  { 
+    icon: <FaTiktok className="w-5 h-5" />, 
+    label: 'Tiktok',
+    accounts: [
+      { url: 'https://www.tiktok.com/@azelyneazz', label: '@azelyneazz' },
+      { url: 'https://www.tiktok.com/@designsocietyy', label: '@designsocietyy' }
+    ]
+  },
+];
 
 function useTextScramble(words) {
   const [display, setDisplay] = useState(words[0]);
@@ -95,8 +117,29 @@ export default function BlogPageClient() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ pages: 1, total: 0 });
   const [allTags, setAllTags] = useState([]);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const dropdownRef = useRef(null);
 
   const scrambledText = useTextScramble(WELCOME_WORDS);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
+
+  const toggleDropdown = (label) => {
+    setActiveDropdown(activeDropdown === label ? null : label);
+  };
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
@@ -161,6 +204,69 @@ export default function BlogPageClient() {
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">
               A place to share my thoughts, ideas, and stories.
             </p>
+
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="flex flex-wrap justify-center gap-3 mt-5"
+              ref={dropdownRef}
+            >
+              {socialLinks.map((link) => (
+                <div key={link.label} className="relative">
+                  {link.accounts ? (
+                    <>
+                      <motion.button
+                        onClick={() => toggleDropdown(link.label)}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="cartoon-outline bg-white p-3 rounded-full hover:bg-[#1c1c84] hover:text-white transition-colors duration-300 w-11 h-11 flex items-center justify-center"
+                      >
+                        <span className="sr-only">{link.label}</span>
+                        {link.icon}
+                      </motion.button>
+                      
+                      <AnimatePresence>
+                        {activeDropdown === link.label && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 8 }}
+                            className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-44 bg-white rounded-lg shadow-lg overflow-hidden z-50 cartoon-outline"
+                          >
+                            {link.accounts.map((account) => (
+                              <a
+                                key={account.label}
+                                href={account.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-[#1c1c84] hover:text-white transition-colors duration-300 whitespace-nowrap"
+                                onClick={() => setActiveDropdown(null)}
+                              >
+                                {account.label}
+                              </a>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <motion.a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="cartoon-outline bg-white p-3 rounded-full hover:bg-[#1c1c84] hover:text-white transition-colors duration-300 w-11 h-11 flex items-center justify-center"
+                    >
+                      <span className="sr-only">{link.label}</span>
+                      {link.icon}
+                    </motion.a>
+                  )}
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
 
           {/* Search Bar */}

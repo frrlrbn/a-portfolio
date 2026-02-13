@@ -193,12 +193,12 @@ export default function DraftsPageClient() {
                         </div>
 
                         {/* Actions */}
-                        <div className="flex sm:flex-col gap-2 flex-shrink-0">
-                          <Link href={`/blog/edit/${draft.slug}`} className="flex-1 sm:flex-initial">
+                        <div className="grid grid-cols-3 sm:grid-cols-1 gap-2 w-full sm:w-auto sm:flex-shrink-0">
+                          <Link href={`/blog/edit/${draft.slug}`}>
                             <motion.div
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="cartoon-outline bg-white px-4 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5 hover:bg-[#1c1c84] hover:text-white transition-colors"
+                              className="cartoon-outline bg-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-1.5 hover:bg-[#1c1c84] hover:text-white transition-colors"
                             >
                               <FiEdit3 size={14} /> Edit
                             </motion.div>
@@ -207,7 +207,7 @@ export default function DraftsPageClient() {
                             onClick={() => handlePublish(draft.slug)}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="flex-1 sm:flex-initial cartoon-outline bg-[#1c1c84] text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5 hover:bg-[#151560] transition-colors"
+                            className="cartoon-outline bg-[#1c1c84] text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-1.5 hover:bg-[#151560] transition-colors"
                           >
                             <FiSend size={14} /> Publish
                           </motion.button>
@@ -215,7 +215,7 @@ export default function DraftsPageClient() {
                             onClick={() => setDeleteSlug(draft.slug)}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="flex-1 sm:flex-initial cartoon-outline bg-white px-4 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5 hover:bg-red-500 hover:text-white transition-colors text-gray-400"
+                            className="cartoon-outline bg-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-1.5 hover:bg-red-500 hover:text-white transition-colors text-gray-400"
                           >
                             <FiTrash2 size={14} /> Delete
                           </motion.button>

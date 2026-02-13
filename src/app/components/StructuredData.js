@@ -10,7 +10,7 @@ export default function StructuredData() {
     "url": "https://azelin.my.id",
     "image": "https://azelin.my.id/images/profile-foreground.png",
     "sameAs": [
-      "https://instagram.com/azelyneazara",
+      "https://instagram.com/azelyneazr",
       "https://instagram.com/designsocietyy",
       "https://www.linkedin.com/in/azelin-azzahra-6bba45333/",
       "https://www.tiktok.com/@azelyneazz",

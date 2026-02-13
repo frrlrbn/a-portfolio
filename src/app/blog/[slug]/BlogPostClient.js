@@ -488,7 +488,8 @@ export default function BlogPostClient() {
       <footer className="py-6 px-4 border-t border-gray-100 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs text-gray-400 font-medium">
-            &copy; {new Date().getFullYear()} frrlrbn
+            &copy; {new Date().getFullYear()}{' '}
+            <a href="https://farrel.id" target="_blank" rel="noopener noreferrer" className="hover:underline underline-offset-2">frrlrbn</a>
           </p>
         </div>
       </footer>

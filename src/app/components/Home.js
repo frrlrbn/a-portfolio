@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiClock, FiSun, FiSunrise, FiSunset, FiMoon, FiCpu, FiSettings, FiTool, FiCode, FiLayers, FiCpu as FiChip, FiArrowRight} from 'react-icons/fi';
+import { FiClock, FiSun, FiSunrise, FiSunset, FiMoon, FiCpu, FiSettings, FiTool, FiCode, FiLayers, FiCpu as FiChip, FiArrowRight, FiBookOpen, FiMail } from 'react-icons/fi';
 
 const roles = [
   'Automation Engineer',
@@ -155,9 +155,25 @@ export default function Home({ currentTime, weather, weatherError }) {
                   href="#contact"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="cartoon-outline bg-white text-[#333333] px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-gray-50 transition-colors duration-300"
+                  className="cartoon-outline bg-white text-[#333333] px-8 py-4 rounded-full font-semibold hidden sm:flex items-center gap-2 hover:bg-gray-50 transition-colors duration-300"
                 >
                   Get in Touch
+                </motion.a>
+                <motion.a
+                  href="#contact"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="cartoon-outline bg-white text-[#333333] p-4 rounded-full font-semibold flex sm:hidden items-center justify-center hover:bg-gray-50 transition-colors duration-300"
+                >
+                  <FiMail className="text-xl" />
+                </motion.a>
+                <motion.a
+                  href="/blog"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="cartoon-outline bg-white text-[#333333] px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-gray-50 transition-colors duration-300"
+                >
+                  Read My Blog
                 </motion.a>
               </motion.div>
 

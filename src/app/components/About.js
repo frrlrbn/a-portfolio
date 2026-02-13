@@ -10,7 +10,7 @@ const socialLinks = [
     icon: <FiInstagram className="w-6 h-6" />, 
     label: 'Instagram',
     accounts: [
-      { url: 'https://instagram.com/azelyneazara', label: '@azelyneazara' },
+      { url: 'https://instagram.com/azelyneazr', label: '@azelyneazr' },
       { url: 'https://instagram.com/designsocietyy', label: '@designsocietyy' }
     ]
   },
